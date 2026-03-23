@@ -1,0 +1,73 @@
+/* SharedComponents.module.css */
+
+.sectionTitle {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 600;
+  text-align: left;
+  width: 80%;
+  margin-bottom: clamp(20px, 4vh, 40px);
+  line-height: 1.2;
+}
+
+.dimText {
+  color: var(--bg-text);
+}
+
+.actionRow {
+  display: flex;
+  gap: clamp(10px, 2vw, 20px);
+  width: 100%;
+  justify-content: center;
+  /* margin-top: auto;  */
+  padding-top: 5px; 
+}
+
+.ghostBtn, .primaryBtn {
+  padding: clamp(12px, 2vw, 16px) clamp(24px, 4vw, 32px);
+  font-weight: 500;
+  font-size: clamp(0.9rem, 1.5vw, 1rem);
+  cursor: pointer;
+  text-decoration: none; /* For links */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, filter 0.2s ease;
+  border: none;
+}
+
+.ghostBtn:hover, .primaryBtn:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+}
+
+.ghostBtn {
+  background: var(--inner-button);
+  color: var(--brand-orange);
+}
+
+.primaryBtn {
+  background: var(--brand-orange);
+  color: #FFF;
+}
+
+@media (max-width: 768px) {
+  .sectionTitle {
+    width: 100%;
+  }
+  .actionRow {
+    flex-direction: row;
+    width: 100%;
+    gap: 10px;
+    /* margin-top: 20px; 
+    margin-bottom: 20px;  */
+    order: 10; /* Ensures it stays at the end of the flex stack */
+    padding-top: 40px;
+  }
+  
+  .ghostBtn, .primaryBtn {
+    flex: 1;
+    padding: 12px 10px;
+    font-size: clamp(0.75rem, 2.5vw, 0.9rem);
+    text-align: center;
+  }
+}

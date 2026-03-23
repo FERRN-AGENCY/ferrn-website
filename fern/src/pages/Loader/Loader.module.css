@@ -1,0 +1,51 @@
+.loaderContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: #050505; 
+  overflow: hidden;
+}
+
+.logoWrapper {
+  display: flex;
+  align-items: center; /* This perfectly aligns the icon and text horizontally */
+  justify-content: center;
+  gap: 12px;
+}
+
+.logoMark {
+  /* Inherit the font-size of the wrapper */
+  font-size: clamp(3rem, 8vw, 4.2rem); 
+  /* 1em forces the SVG to perfectly match the font height */
+  height: 1em; 
+  width: auto; 
+  fill: #F94406; 
+}
+
+.textContainer {
+  display: flex;
+  align-items: center;
+  font-size: clamp(3rem, 8vw, 4.2rem); 
+}
+
+.letter {
+  color: #F94406;
+  font-weight: 700;
+  font-size: clamp(4.2rem, 10.9vw, 6rem); 
+  letter-spacing: 2px;
+  line-height: 0; 
+  margin: 0em;
+}
+
+.counter {
+  position: absolute;
+  bottom: 40px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  color: #3C3C3C; 
+  font-weight: 500;
+  letter-spacing: 2px;
+}

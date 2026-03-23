@@ -1,0 +1,9 @@
+.scrollContainer {
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-primary); 
+  /* Hides the horizontal scrollbar just in case anything overflows */
+  /* overflow-x: hidden;  */
+}

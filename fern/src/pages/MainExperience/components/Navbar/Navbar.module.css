@@ -1,0 +1,83 @@
+/* Invisible full-width wrapper glued to the bottom of the screen */
+.fixedWrapper {
+  position: fixed;
+  bottom: clamp(20px, 4vh, 40px);
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  z-index: 1000;
+  pointer-events: none; /* Lets clicks pass through the empty space around the navbar */
+}
+
+/* The actual visible Navbar */
+.navbarContainer {
+  pointer-events: auto; /* Re-enables clicks for the buttons */
+  display: flex;
+  gap: clamp(8px, 1.5vw, 15px);
+  align-items: center;
+}
+
+/* Base style for all 3 segmented blocks */
+.navBlock {
+  background-color: var(--box-bg);
+  /* Fallback color just in case your variable is missing: */
+  /* background-color: #111;  */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0px 15px;
+  height: clamp(50px, 6vh, 60px);
+}
+
+.navLogo {
+  height: 24px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* The wide middle block holding the text */
+.linksBlock {
+  display: flex;
+  gap: clamp(15px, 2vw, 30px);
+  padding: 0 clamp(20px, 3vw, 40px);
+}
+
+.navLink {
+  background: transparent;
+  border: none;
+  color: var(--bg-text);
+  font-size: clamp(0.8rem, 1.2vw, 0.95rem);
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  white-space: nowrap;
+}
+
+.navLink:hover {
+  color: var(--text-primary);
+}
+
+.activeLink {
+  color: var(--brand-orange) !important;
+  font-weight: 500;
+}
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 900px) {
+  .fixedWrapper{
+    display: none;
+  }
+  /* On very small screens, the navbar needs to shrink or hide items
+  .linksBlock {
+    Allows the user to swipe through the nav links horizontally if they don't fit
+    max-width: 60vw;
+    overflow-x: auto;
+    Hides the ugly scrollbar but keeps it swipable
+    scrollbar-width: none; 
+    -ms-overflow-style: none;
+  }
+  .linksBlock::-webkit-scrollbar {
+    display: none;
+  } */
+}

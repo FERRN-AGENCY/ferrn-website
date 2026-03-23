@@ -1,0 +1,215 @@
+section {
+  position: relative;
+}
+
+.chatSection {
+  width: 100%;
+  display: flex;
+  position: relative; /* FIX: Removed the quotes that were breaking this! */
+  flex-direction: column;
+  align-items: center;
+  padding: clamp(60px, 10vh, 120px) 20px;
+  /* Flips between pure white (light) and pure black/dark grey (dark) */
+  background-color: var(--bg-primary, #0A0A0A);
+  transition: background-color 0.3s ease;
+}
+
+.title {
+  /* Flips between black (light) and white (dark) */
+  color: var(--text-primary, #FFFFFF);
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 40px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  transition: color 0.3s ease;
+}
+
+.brandText {
+  color: var(--brand-orange, #FF5A00); /* Always stays orange */
+}
+
+.chatContainer {
+  width: 100%;
+  max-width: 600px;
+  /* Flips between light grey (light) and dark grey (dark) */
+  background-color: var(--bg-secondary, #141414); 
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.chatBox {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* User Message (Right Align) */
+.messageRowRight {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.bubbleRight {
+  /* Flips between pale grey (light) and charcoal grey (dark) */
+  background-color: var(--bg-tertiary, #242424);
+  /* Flips between black text (light) and white text (dark) */
+  color: var(--text-primary, #FFFFFF);
+  font-size: 0.95rem;
+  padding: 16px 20px;
+  max-width: 80%;
+  line-height: 1.4;
+  transition: all 0.3s ease;
+}
+
+.avatarUser {
+  width: 53px;
+  height: 53px;
+  /* Flips between white box (light) and dark box (dark) */
+  background-color: var(--bg-primary, #333333);
+  color: var(--brand-orange, #FF5A00);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+  transition: background-color 0.3s ease;
+}
+
+/* Bob Message (Left Align) */
+.messageRowLeft {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: 12px;
+  width: 66%;
+}
+
+.bubbleLeft {
+  background-color: var(--brand-orange, #FF5A00);
+  color: #FFFFFF; /* Bob's text ALWAYS stays white on the orange background */
+  font-size: 0.95rem;
+  padding: 16px 20px;
+  max-width: 80%;
+  line-height: 1.4;
+}
+
+.avatarBob {
+  width: 32px;
+  height: 32px;
+  background-color: #000000; /* Bob's avatar background stays dark */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.bobIcon {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background-color: var(--brand-orange, #FF5A00); 
+}
+
+/* Input Area */
+.inputArea {
+  display: flex;
+  margin-top: 10px;
+  /* Flips between light grey (light) and dark grey (dark) */
+  background-color: var(--bg-tertiary, #1A1A1A);
+  overflow: hidden;
+  height: 48px;
+  transition: background-color 0.3s ease;
+}
+
+.chatInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 0 20px;
+  /* Flips between black text (light) and white text (dark) */
+  color: var(--text-primary, #FFFFFF);
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.chatInput::placeholder {
+  color: var(--text-muted, #888888);
+}
+
+.sendButton {
+  background-color: var(--brand-orange, #FF5A00);
+  border: none;
+  width: 48px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.sendButton:hover {
+  opacity: 0.8;
+}
+
+/* Bottom CTA Button */
+.customQuestionBtn {
+  margin-top: 30px;
+  background-color: var(--brand-orange, #FF5A00);
+  color: #FFFFFF; /* ALWAYS stays white on the orange background */
+  border: none;
+  padding: 12px 24px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.customQuestionBtn:hover {
+  transform: translateY(-2px);
+}
+
+/* Responsive Mobile Rules */
+@media (max-width: 768px) {
+  .chatSection{
+    width: auto;
+  }
+  .chatContainer {
+    padding: 20px;
+  }
+  .bubbleRight, .bubbleLeft {
+    font-size: 0.85rem;
+    padding: 12px 16px;
+  }
+  .messageRowLeft {
+    width: 85%; /* Let Bob's messages breathe more on mobile screens */
+  }
+}
+
+.chatBox {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-height: 400px; /* Locks the height */
+  overflow-y: auto;  /* Keeps the scroll strictly inside this box */
+  padding-right: 10px;
+}
+
+/* Optional: Styles the scrollbar so it looks clean */
+.chatBox::-webkit-scrollbar {
+  width: 6px;
+}
+.chatBox::-webkit-scrollbar-thumb {
+  background-color: var(--bg-tertiary, #333);
+  border-radius: 10px;
+}

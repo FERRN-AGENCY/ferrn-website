@@ -1,0 +1,89 @@
+/* The main wrapper takes up the full screen */
+.heroContainer {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden; /* Prevents scrolling if the video is slightly too big */
+  background-color: #050505; /* A dark fallback color while the video loads */
+}
+
+/* Layer 1: Stretch the video to cover the screen perfectly */
+.bgVideo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures the video doesn't stretch weirdly */
+  z-index: 0;
+}
+
+/* Layer 2: The Black Overlay */
+.videoOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Using rgba to make it 75% black. Increase the 0.75 if you want it darker */
+  background-color: #000000DB;
+  z-index: 1;
+}
+
+/* Layer 3: The Content */
+.contentLayer {
+  position: relative;
+  z-index: 2; /* Puts the text on top of the overlay */
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Top Navigation Setup */
+.header {
+  /* Fluid top/bottom padding: 56px on desktop, shrinks to 32px on short mobile screens */
+  padding: clamp(32px, 5vh, 56px) 0;
+  width: 100%;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.welcomeNav {
+  color: #A8A8A8; /* Your soft gray from the theme */
+  font-weight: 500;
+  font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+}
+
+/* Centered Headline Setup */
+.centerContent {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  /* Fluid side padding: 100px on desktop, safely shrinks to 20px on mobile */
+  padding: 0 clamp(20px, 8vw, 100px);
+  /* Matches the width limit from your mockups */
+  max-width: 1000px; 
+  height: 100%;
+  justify-content: end;
+}
+
+.centerLogo {
+  /* Fluid logo size so it doesn't look gigantic on a phone */
+  width: clamp(28px, 4vw, 40px); 
+  height: auto;
+  /* Fluid spacing between the logo and the subtitle */
+  margin-bottom: clamp(12px, 2vh, 18px);
+}
+
+.heroHeadline {
+  color: #FFFFFF; /* Hardcoded to white because the video overlay is permanently dark */
+  font-weight: 600;
+  /* Fluid typography: Huge on desktop, smaller on mobile */
+  font-size: clamp(2rem, 5vw + 1rem, 4rem); 
+  line-height: 1.1;
+  letter-spacing: -1px; /* Tightens up the text for a premium feel */
+}

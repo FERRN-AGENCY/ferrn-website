@@ -1,0 +1,194 @@
+.footerWrapper {
+  position: relative;
+  width: 100%;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  /* The wrapper background FLIPS with the theme */
+  background-color: var(--bg-primary, #0A0A0A);
+  overflow: hidden; 
+}
+
+/* The massive faded text in the background */
+.watermark {
+  position: absolute;
+  bottom: -2vw;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 25vw;
+  font-weight: 900;
+  /* Flips to black in light mode, stays faint */
+  color: var(--text-primary, #FFFFFF); 
+  opacity: 0.03;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 0;
+  line-height: 0.8;
+}
+
+/* =========================================
+   THE FOOTER CARD (LOCKED TO DARK MODE)
+   ========================================= */
+
+.footerCard {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 1000px;
+  /* LOCKED: Always dark charcoal */
+  background-color: #141414;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* Top Section: Grid and Logo */
+.topSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 20px;
+}
+
+/* 2x3 Social Grid */
+.socialGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  flex: 1;
+  max-width: 300px;
+}
+
+.socialBox {
+  /* LOCKED: Always dark */
+  background-color: #1A1A1A;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* LOCKED: Always grey */
+  color: #555555;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.socialBox:hover {
+  background-color: #222222;
+  color: #FFFFFF; 
+}
+
+/* Matches the orange highlight on the first icon in your mockup */
+.activeSocial {
+  color: var(--brand-orange, #FF5A00); 
+}
+
+/* Right Side Logo Box */
+.logoBox {
+  flex: 1;
+  /* LOCKED: Always dark */
+  background-color: #1A1A1A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 20px;
+}
+
+.logoText {
+  /* LOCKED: Always white */
+  color: #FFFFFF;
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+.footerLogo {
+  width: 24px;
+  height: 24px;
+  display: none; 
+}
+
+/* Bottom Section: Text and Button */
+.bottomSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-top: 40px;
+}
+
+.ctaText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.subtext {
+  /* LOCKED: Always grey */
+  color: #888888;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.maintext {
+  /* LOCKED: Always white */
+  color: #FFFFFF;
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  font-weight: 500;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.startBtn {
+  background-color: var(--brand-orange, #FF5A00);
+  color: #FFFFFF; 
+  border: none;
+  padding: 12px 24px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.startBtn:hover {
+  transform: translateY(-2px);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .watermark{
+    font-size: 35vw;
+  }
+  .footerWrapper{
+    width: auto;
+  }
+  .footerCard {
+    padding: 24px;
+    gap: 30px;
+  }
+  
+  .topSection {
+    flex-direction: column;
+  }
+  
+  .socialGrid {
+    max-width: 100%;
+  }
+  
+  .logoBox {
+    padding: 30px 20px;
+  }
+  
+  .bottomSection {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+  }
+  
+  .startBtn {
+    width: 100%;
+  }
+}

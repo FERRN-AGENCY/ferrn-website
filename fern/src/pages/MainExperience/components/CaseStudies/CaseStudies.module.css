@@ -1,0 +1,57 @@
+.caseContainer {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  /* THE FIX 1: MUST be turned back on. Without this, the 3.5x zoom calculates from the wrong coordinates and breaks the scroll. */
+  /* justify-content: center;  */
+  
+  /* Adjusted the minimum padding so mobile doesn't get completely crushed */
+  padding: 0 clamp(20px, 4vw, 70px); 
+  box-sizing: border-box;
+  
+  /* REQUIRED: Allows the video to safely grow past the 100vh container during the zoom */
+  overflow: visible; 
+}
+
+.caseTitle {
+  color: #FFFFFF;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 600;
+  margin: clamp(20px, 4vh, 40px);
+  text-align: center;
+  letter-spacing: -0.02em;
+  
+  /* THE FIX 2: Use a unitless number for line-height so it scales perfectly with the clamp font size */
+  line-height: 1; 
+  flex-shrink: 0;
+  position: relative;
+  z-index: 10;
+}
+
+.videoWrapper {
+  /* THE FIX 3: Never use 80% width if you want mobile responsiveness. 
+     Use 100% width, and let the max-width control the desktop size. */
+  width: 100%;
+  max-width: 1230px; 
+  
+  /* Your exact requested dimensions */
+  aspect-ratio: 1030 / 600; 
+  max-height: 79vh; 
+  
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3); 
+  
+  /* Ensures the animation zooms straight at the camera */
+  transform-origin: center center;
+  background-color: #111; /* Fallback before video loads */
+}
+
+.videoElement {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}

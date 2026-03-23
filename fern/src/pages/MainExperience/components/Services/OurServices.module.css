@@ -1,0 +1,183 @@
+.servicesContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; 
+  align-items: center;
+  height: 100vh; 
+  width: 100%;
+  box-sizing: border-box; 
+  padding: clamp(30px, 6vh, 80px) clamp(10px, 8vw, 100px) 0; 
+  color: var(--text-primary); 
+}
+
+.bounds {
+  width: 100%;
+  max-width: 1300px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+  flex-shrink: 0; 
+  margin: auto;
+}
+
+:global(#services-special-title) {
+  text-align: center;
+  margin: 0 auto; 
+  color: var(--text-primary) !important;
+}
+
+.contentWrapper {
+  max-width: 1300px;
+  width: 100%;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.7fr; 
+  gap: clamp(20px, 4vw, 40px);
+  align-items: center;
+  flex: 1; 
+  min-height: 0; 
+  max-height: 55vh; 
+  padding: clamp(5px, 3vh, 40px) 0;
+}
+
+/* THE FIX: Structural wrappers that tell RevealItem how to behave inside the grid */
+.leftGridItem {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.rightGridItem {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.listColumn {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; 
+  flex: 1; /* Stretches to fill the Reveal wrapper completely */
+  position: relative;
+  z-index: 5; 
+}
+
+.serviceItem {
+  font-size: clamp(14px, 1.8vw, 28px); 
+  font-weight: 500;
+  color: var(--text-muted, #888888); 
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: left center;
+  line-height: 1.2; 
+  white-space: nowrap; 
+}
+
+.activeItem {
+  color: var(--brand-orange, #FF5A00); 
+  font-size: clamp(20px, 3vw, 40px); 
+  font-weight: 600;
+  padding-left: clamp(10px, 2vw, 26px);
+}
+
+.serviceItem:hover:not(.activeItem) {
+  color: var(--text-primary); 
+}
+
+.imageColumn {
+  width: 100%;
+  flex: 1; /* Stretches to fill the Reveal wrapper completely */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1; 
+}
+
+.imageCard {
+  width: 100%;
+  max-width: 755px;
+  aspect-ratio: 790 / 440; 
+  height: auto; 
+  border-radius: 0px; 
+  display: flex;
+  overflow: hidden; 
+  margin: 0 auto; 
+}
+
+.serviceVideoElement {
+  width: 100%; 
+  height: 100%;
+  object-fit: cover; 
+  display: block;
+}
+/* --- MOBILE SPECIFICS --- */
+
+@media (max-width: 768px) {
+  .servicesContainer {
+    padding: 40px 20px 5px;
+  }
+  
+  .contentWrapper {
+    grid-template-columns: 1fr; 
+    gap: 20px; 
+    height: auto; 
+    max-height: none;
+    flex: none; 
+    padding: 0px;
+  }
+  
+  /* Keeps the video on top */
+  .rightGridItem {
+    order: -1; 
+  }
+
+  .imageColumn {
+    width: 100%;
+    height: auto; 
+    min-height: auto;
+  }
+  
+  /* Caps the video height so it doesn't crush the layout */
+  .imageCard {
+    width: 100%;
+    max-height: 220px; 
+  }
+  
+  /* THE FIX: Turns the massive vertical column into a compact, 2-item-per-row grid */
+  .listColumn {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Forces exactly 2 items per row */
+    gap: 12px; /* Breathing room between the buttons */
+    margin-top: 10px;
+  }
+  
+  /* THE FIX: Styles the text links into modern, tappable mobile cards */
+  .serviceItem {
+    text-align: center;
+    transform-origin: center center;
+    white-space: normal; 
+    padding: 12px 8px; 
+    font-size: 0.55rem; 
+    background-color: rgba(255, 255, 255, 0.03); /* Gives them a faint, clickable button shape */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.3;
+  }
+  
+  /* Upgrades the active state so the whole button turns orange */
+  .activeItem {
+    padding-left: 8px; /* Overrides the massive desktop indent */
+    background-color: var(--brand-orange, #FF5A00);
+    color: #FFFFFF !important;
+  }
+  /* .bounds{
+    margin-top: 0px;
+    height: fit-content;
+  } */
+}

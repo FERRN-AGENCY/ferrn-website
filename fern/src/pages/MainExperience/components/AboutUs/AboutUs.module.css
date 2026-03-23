@@ -1,0 +1,155 @@
+.aboutContainer {
+  /* min-height ensures nothing gets cut off if the screen is super short */
+  min-height: 100vh;
+  position: relative;
+  padding: 10px clamp(10px, 8vw, 100px);
+  /* clamp(40px, 8vh, 80px) */
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  justify-content: center;
+  color: var(--text-primary);
+  background-color: var(--bg-primary) ;
+  max-width: 1300px;
+  /* margin: 0 auto;  */
+}
+
+/* The Layout Grid */
+.contentWrapper {
+  display: grid;
+  grid-template-columns: 1fr 2fr; 
+  gap: clamp(10px, 4vw, 20px);
+  width: 100%;
+  margin-bottom: clamp(20px, 4vh, 30px);
+}
+
+/* --- Left Column: Tabs --- */
+.tabsColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background-color: var(--box-bg);
+  padding: 5px;
+}
+
+.tabButton {
+  background-color: var(--not-active);
+  color: var(--bg-text);
+  border: none;
+  padding: clamp(14px, 2vw, 18.5px);
+  text-align: center;
+  font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+.activeTab {
+  background-color: var(--box-input); 
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.tabButton:hover:not(.activeTab) {
+  background-color: rgba(168, 168, 168, 0.1);
+  color: var(--text-primary);
+}
+.mobileCardTitle {
+  display: none; 
+}
+/* --- Right Column: Dynamic Content --- */
+.displayColumn {
+  width: 100%;
+  /* This neatly hits exactly 440px on standard desktop screens (960px+), 
+     but safely shrinks down to 350px on smaller tablets so it doesn't break */
+  height: clamp(350px, 46vw, 440px); 
+}
+
+.imageCard {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.imagePlaceholder {
+  width: 100%;
+  height: 100%;
+  background-color: #2A2A2A; 
+  position: relative;
+  display: flex;
+  align-items: flex-end; 
+}
+
+.cardOverlay {
+  background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
+  /* padding: clamp(20px, 4vw, 30px) clamp(20px, 5vw, 50px); */
+  width: 100%;
+  color: #FFF;
+}
+
+.tagsBox {
+  display: flex;
+  gap: clamp(10px, 2vw, 15px);
+  margin-bottom: clamp(10px, 2vh, 20px);
+  justify-content: space-between;
+  flex-wrap: wrap; 
+  padding: 0px clamp(20px, 5vw, 50px);
+}
+
+.tag {
+  font-size: clamp(0.75rem, 1.2vw, 0.85rem);
+  font-weight: 500;
+  letter-spacing: 1px;
+  padding: clamp(8px, 1.5vw, 10.5px) clamp(12px, 2vw, 19px);
+  background-color: #00000008;
+  backdrop-filter: blur(11.4px); 
+}
+
+.blackbg {
+    /* Changed DE (87% solid) to 99 (60% solid) */
+    background-color: #00000099; 
+    padding: clamp(10px, 4vw, 20px) clamp(20px, 5vw, 50px);
+}
+
+.cardDescription {
+  font-size: clamp(0.7rem, 1.5vw, 1rem);
+  line-height: 1.6;
+  max-width: 800px;
+  margin: 0px;
+}
+
+/* ==========================================
+   📱 MOBILE RESPONSIVENESS
+   ========================================== */
+@media (max-width: 468px) {
+  .contentWrapper {
+    display: contents; 
+  }
+  .displayColumn {
+    order: 2;
+    height: clamp(400px, 60vh, 550px); 
+    margin-bottom: 20px; 
+  }
+  .blackbg{
+    padding: 10px;
+  }
+  .tagsBox{
+    padding: 10px;
+  }
+  /* --- THE TWO NEW MOBILE TRICKS --- */
+  
+  /* 1. Hide the tabs entirely! */
+  .tabsColumn {
+    display: none; 
+  }
+
+  /* 2. Reveal the active tab's name inside the black text box! */
+  .mobileCardTitle {
+    display: block; 
+    color: var(--brand-orange); /* Highlights the name so it stands out */
+    font-size: clamp(1.1rem, 4vw, 1.3rem);
+    font-weight: 700;
+    margin: 0 0 8px 0;
+  }
+}

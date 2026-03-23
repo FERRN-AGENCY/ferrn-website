@@ -1,0 +1,91 @@
+import Fernlogo from '../assets/Fernlogo.svg';
+import Fern from '../assets/Fern.svg';
+import HeroVideo from '../assets/HeroVideo.mp4';
+import avatarBob from '../assets/avatarBob.svg';
+
+import clientLogo1 from '../assets/clientLogo1.svg';
+import clientLogo2 from '../assets/clientLogo2.svg';
+import clientLogo3 from '../assets/clientLogo3.svg';
+import clientLogo4 from '../assets/clientLogo4.svg'; 
+import clientLogo5 from '../assets/clientLogo5.svg'; 
+import clientLogo6 from '../assets/clientLogo6.svg'; 
+import clientLogo7 from '../assets/clientLogo7.svg'; 
+import clientLogo8 from '../assets/clientLogo8.svg'; 
+import clientLogo9 from '../assets/clientLogo9.svg'; 
+import clientLogo10 from '../assets/clientLogo10.svg';       
+import clientLogo11 from '../assets/clientLogo11.svg';   
+import clientLogo12 from '../assets/clientLogo12.svg';
+
+import aboutSection01 from '../assets/about-section01.jpg';
+import aboutSection02 from '../assets/about-section02.jpg';
+import aboutSection03 from '../assets/about-section03.jpg';
+import aboutSection04 from '../assets/about-section04.jpg';
+import aboutSection05 from '../assets/about-section05.jpg';
+
+// Standard video imports
+import aiChatbot from '../assets/ai-chatbot.mp4';
+import branding from '../assets/branding.mp4';
+import dgmartkingStrat from '../assets/dgmartking_strat.mp4';
+import mobile from '../assets/mobile.mp4';
+import productDesign from '../assets/product-design.mp4';
+import socials from '../assets/socials.mp4';
+import websiteDev from '../assets/website-dev.mp4';
+
+// The Grid Images
+import grid1 from '../assets/grid1.png';
+import grid2 from '../assets/grid2.jpg';
+import grid3 from '../assets/grid3.png';
+import grid4 from '../assets/grid4.jpg';
+import grid5 from '../assets/grid5.jpg';
+import grid6 from '../assets/grid6.jpg';
+import grid7 from '../assets/grid7.jpg';
+import grid8 from '../assets/grid8.jpg';
+import defaultImg from '../assets/default_img.svg'; 
+
+const images = {
+  Fernlogo,
+  Fern,
+  HeroVideo,
+  avatarBob,
+
+  clientLogo1,
+  clientLogo2,
+  clientLogo3,
+  clientLogo4,
+  clientLogo5,
+  clientLogo6,
+  clientLogo7,
+  clientLogo8,
+  clientLogo9,  
+  clientLogo10,          
+  clientLogo11,
+  clientLogo12,
+
+  aboutSection01,
+  aboutSection02,
+  aboutSection03,
+  aboutSection04,
+  aboutSection05,
+
+  // Standard video exports
+  aiChatbot,
+  branding,
+  dgmartkingStrat,
+  mobile,
+  productDesign,
+  socials,
+  websiteDev,
+
+  // The Grid Images
+  grid1,
+  grid2,
+  grid3,
+  grid4,
+  grid5,
+  grid6,
+  grid7,
+  grid8,    
+  defaultImg,
+};
+
+export default images;

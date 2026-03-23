@@ -1,0 +1,172 @@
+.teaContainer {
+  width: 100%;
+  background-color: var(--bg-primary);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; 
+}
+
+.header {
+  text-align: center;
+  margin-bottom: clamp(40px, 6vh, 60px);
+  position: relative;
+  z-index: 10;
+  padding: 0 20px;
+  width: fit-content;
+  margin: 0 auto
+}
+
+/* =========================================
+   THE INFINITE STAGE
+   ========================================= */
+.carouselViewport {
+  position: relative;
+  width: 100%;
+  /* Height accommodates the card (approx 650px) + the vertical lift (-15px) */
+  height: clamp(650px, 75vh, 850px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* =========================================
+   INDIVIDUAL AUDIO CARDS
+   ========================================= */
+.audioCard {
+  position: absolute; /* ABSOLUTE: Framer Motion handles the X positioning */
+  width: 450px; /* YOUR EXACT WIDTH */
+  max-width: 85vw; /* Keeps it responsive on phones */
+  display: flex;
+  flex-direction: column;
+  cursor: grab;
+  /* Dark mode grey container */
+  background-color: var(--bg-secondary, #141414);
+}
+
+.audioCard:active {
+  cursor: grabbing;
+}
+
+/* Image Block */
+.imageContainer {
+  width: 100%;
+  height: 420px; /* THE FIX: An unbreakable, fixed height. Adjust this number if you want them taller/shorter */
+  position: relative;
+  background-color: var(--bg-secondary);
+  pointer-events: none; /* Stops image from interfering with Framer drag */
+}
+
+.clientImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.nameTag {
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+  color: #FFFFFF; 
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-shadow: 0px 2px 4px rgba(0,0,0,0.5);
+}
+
+/* =========================================
+   PLAYER & TRANSCRIPT UI
+   ========================================= */
+.playerContainer {
+  background-color: var(--bg-secondary);
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border-top: 1px solid var(--bg-primary); 
+}
+
+.playBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+/* FULL WIDTH Waveform */
+.waveform {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2px;
+  flex: 1; /* Pushes it across the whole remaining width */
+  height: 24px;
+}
+
+.waveBar {
+  flex: 1;
+  height: 100%;
+  background-color: var(--bg-text); /* Base theme grey */
+  border-radius: 2px;
+  transition: background-color 0.1s ease;
+}
+
+/* Orange fill as audio progresses */
+.waveBarActive {
+  background-color: var(--brand-orange); 
+}
+
+/* Transcription Toggle */
+.transcriptionWrapper {
+  background-color: var(--bg-secondary);
+  padding: 0 16px 16px 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.transcribeToggle {
+  background: none;
+  border: none;
+  color: var(--brand-orange);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  padding: 8px 0;
+}
+
+.transcribeToggle:disabled {
+  color: var(--font-text);
+  cursor: not-allowed;
+}
+
+.transcriptBox {
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  line-height: 1.5;
+  padding-top: 12px;
+  border-top: 1px solid var(--bg-tertiary);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.footerButtons {
+  width: 100%;
+  margin-top: clamp(20px, 4vh, 40px);
+  display: flex;
+  justify-content: center;
+  position: relative;
+  z-index: 10;
+}
+@media (max-width: 900px){
+    .footerButtons{
+        width: 80%;
+        margin: auto;
+    }
+}

@@ -1,0 +1,193 @@
+/* CONTAINER */
+.gridContainer {
+  width: 100%;
+  background: var(--bg-primary);
+  padding: clamp(60px, 10vh, 120px) 0;
+}
+
+.inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 5%;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* HEADER */
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+/* FILTERS */
+.filterBlocks {
+  display: flex;
+  gap: 10px;
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.filterButton {
+  /* THE FIX: Replaced hardcoded #111 with your dynamic --not-active variable */
+  background: var(--not-active);
+  border: none;
+  padding: 10px 36px;
+  font-size: 1.2rem;
+  /* THE FIX: Replaced #888 with your dynamic --font-text variable */
+  color: var(--font-text);
+  cursor: pointer;
+  transition: all 0.3s ease;
+ /* Slight rounding looks better on these tabs */
+}
+
+.filterButton:hover {
+  /* THE FIX: Text adapts to black in light mode, white in dark mode */
+  color: var(--text-primary); 
+}
+
+.activeFilter {
+  /* THE FIX: Active button uses the main background and primary text color */
+  background: var(--bg-box);
+  color: var(--text-primary);
+  /* Added a very subtle shadow so the active tab "pops" off the background in light mode */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+/* CARD */
+.card {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1.9 / 1;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: 0.4s ease;
+}
+
+/* OVERLAY */
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Keeps the dark overlay over images in both modes for text legibility */
+  background: rgba(0,0,0,0.4); 
+  opacity: 0;
+  transition: 0.3s ease;
+}
+
+.card:hover .overlay {
+  opacity: 1;
+}
+
+.card:hover .image {
+  filter: brightness(0.7);
+  transform: scale(1.05);
+}
+
+/* TAG */
+.tag {
+  background: var(--brand-orange);
+  color: #fff;
+  padding: 8px 18px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  transform: rotate(-10deg);
+}
+
+/* FOOTER */
+.footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+/* DYNAMIC CENTER TILE STYLE */
+.categoryCard {
+  background: linear-gradient(135deg, #FF7A00 0%, #FF5A00 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+}
+
+.categoryCardContent {
+  color: #FFFFFF;
+  font-size: clamp(1.2rem, 2vw, 1.8rem);
+  font-weight: 600;
+  text-align: center;
+  padding: 10px;
+  line-height: 1.2;
+}
+
+/* PLACEHOLDER CARD */
+.placeholder {
+  /* THE FIX: Adapts to your light/dark mode variables instead of forced white transparency */
+  background: var(--not-active);
+  border: 1px dashed var(--bg-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* TEXT INSIDE EMPTY BOX */
+.placeholderContent {
+  /* THE FIX: Adapts to gray text in both modes */
+  color: var(--font-text);
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .filterBlocks {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    width: fit-content;
+    justify-content: normal;
+  }
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filterBlocks {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    width: fit-content;
+    justify-content: normal;
+  }
+  .filterButton{
+    font-size: 0.8rem;
+  }
+  .overlay {
+    opacity: 1;
+  }
+
+  .image {
+    filter: brightness(0.8);
+  }
+}

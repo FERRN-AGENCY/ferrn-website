@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* Core Brand Colors */
+  --brand-orange: #FF4100;
+  --pure-white: #FFFFFF;
+  --pure-black: #050505; /* Slightly off-black for a more premium futuristic feel */
+  --font-text:  #A8A8A8;
+
+  /* Input / Container Backgrounds */
+  --gray-light-mode: #C2C2C2;
+  --gray-dark-mode: #3C3C3C;
+
+  /* Default Theme (Light Mode) */
+  --bg-primary: var(--pure-white);
+  --text-primary: var(--pure-black);
+  
+  /* --- NEW: Chat & Footer Support (Light) --- */
+  --bg-secondary: #F5F5F5; /* Light grey for the chat box container */
+  --bg-tertiary: #EBEBEB;  /* Slightly darker grey for chat bubbles/inputs */
+  --text-secondary: #555555;
+  --text-muted: #888888;
+  /* ------------------------------------------ */
+
+  --bg-text: var(--gray-light-mode);
+  --bg-box: #F9F9F9;
+  --bg-input: #EEEEEE;
+  --box-bg: #FFFAFA;
+  --box-input: #FFFFFF;
+  --not-active: #F0F0F0;
+  --inner-button: #F9F9F9;
+}
+
+/* System Dark Mode Override */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-primary: var(--pure-black);
+    --text-primary: var(--pure-white);
+    
+    /* --- NEW: Chat & Footer Support (Dark) --- */
+    --bg-secondary: #141414; /* Deep grey for the chat box container */
+    --bg-tertiary: #242424;  /* Charcoal for chat bubbles/inputs */
+    --text-secondary: #A8A8A8;
+    --text-muted: #555555;
+    /* ----------------------------------------- */
+
+    --bg-text: var(--gray-dark-mode);
+    --bg-box: #141414;
+    --bg-input: #1C1C1C;
+    --box-bg: #141414;
+    --box-input: #0C0C0C;
+    --not-active: #191919;
+    --inner-button: #1B1B1B;
+  }
+}
+
+/* Global Reset & Font Application */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  /* This transition ensures the theme swap is smooth, not instant */
+  transition: background-color 0.5s ease, color 0.5s ease;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+button {
+  font-family: 'Poppins', sans-serif;
+}

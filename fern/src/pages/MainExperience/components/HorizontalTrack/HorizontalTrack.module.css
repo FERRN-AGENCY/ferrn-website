@@ -1,0 +1,45 @@
+.scrollSection {
+  position: relative;
+  background-color: var(--bg-primary); 
+}
+
+.stickyContainer {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden; 
+}
+
+/* --- THE LEFT FADE GRADIENT --- */
+.leftFade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 15vw; 
+  height: 100vh;
+  background: linear-gradient(to right, var(--bg-primary) 0%, transparent 100%);
+  z-index: 50; 
+  pointer-events: none; 
+}
+
+/* --- THE MOVING STRIP --- */
+.flexContainer {
+  display: flex;
+  height: 100%;
+  /* THE FIX: Let the container naturally grow to fit all pages + gaps */
+  width: max-content; 
+  /* THE FIX: Creates the physical blank space between pages! */
+  gap: 15vw; 
+}
+
+/* --- THE ANTI-SPILL WRAPPER --- */
+.pageWrapper {
+  width: 100vw;
+  height: 100vh;
+  flex-shrink: 0; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; 
+}
