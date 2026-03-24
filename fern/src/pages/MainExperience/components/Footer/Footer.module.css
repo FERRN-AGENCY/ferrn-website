@@ -182,7 +182,8 @@
     font-size: 35vw;
   }
   .footerWrapper{
-    width: auto;
+    width: 90%;
+    margin: auto;
   }
   .footerCard {
     padding: 24px;

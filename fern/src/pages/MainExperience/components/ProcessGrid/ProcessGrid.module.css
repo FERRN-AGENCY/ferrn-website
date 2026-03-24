@@ -172,7 +172,10 @@
    MOBILE RESPONSIVENESS
    ========================================= */
 @media (max-width: 768px) {
-  
+  .inner {
+    width: 90%;
+    margin: auto;
+  }
   /* Aggressively hide the custom cursor on mobile just in case */
   .customCursor {
     display: none !important;

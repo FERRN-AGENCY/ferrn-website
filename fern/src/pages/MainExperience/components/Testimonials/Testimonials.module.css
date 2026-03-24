@@ -187,7 +187,10 @@
    MOBILE RESPONSIVENESS
    ========================================= */
 @media (max-width: 768px) {
-  
+  .teaContainer{
+    width: 90%;
+    margin: auto;
+  }
   /* Shrink the padding and gap inside the player */
   .playerContainer {
     padding: 12px 15px;

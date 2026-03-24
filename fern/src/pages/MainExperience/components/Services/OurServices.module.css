@@ -120,7 +120,9 @@
 /* --- MOBILE SPECIFICS --- */
 @media (max-width: 768px) {
   .servicesContainer {
-    padding: 5px 20px;
+    width: 90%;
+    margin: auto;
+    padding: 0px;
   }
   
   .contentWrapper {

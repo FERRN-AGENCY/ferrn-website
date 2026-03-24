@@ -123,6 +123,11 @@
    📱 MOBILE RESPONSIVENESS
    ========================================== */
 @media (max-width: 468px) {
+    .aboutContainer{
+        width: 90%;
+        margin: auto;
+        padding: 0px;
+    }
   .contentWrapper {
     display: block; 
   }

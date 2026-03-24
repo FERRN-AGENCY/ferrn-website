@@ -111,6 +111,11 @@
 
 /* NEW: Remove the card background on mobile screens */
 @media (max-width: 768px) {
+  .onboardingContainer{
+    width: 90%;
+    margin: auto;
+    padding: 0px;
+  }
   .card {
     background-color: transparent; 
   }

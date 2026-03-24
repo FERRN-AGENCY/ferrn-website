@@ -154,6 +154,7 @@
   
   .bounds{
     width: 84%;
+    margin: auto;
   }
 
   .tagsOverlay {
