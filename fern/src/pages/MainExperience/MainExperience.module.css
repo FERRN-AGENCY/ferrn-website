@@ -87,3 +87,9 @@
   line-height: 1.1;
   letter-spacing: -1px; /* Tightens up the text for a premium feel */
 }
+
+@media (max-width: 768px) {
+  .heroHeadline {
+    margin: 0 auto 70px;
+  }
+}

@@ -12,18 +12,25 @@ const WorkTransitionWrapper = () => {
     offset: ["start start", "end end"]
   });
 
+  // --- THE FIX: The Synchronized Timeline ---
+  // We changed 0.85 to 0.75. Now, the exact millisecond the Process Grid starts 
+  // sliding up from the bottom, the curtain starts sliding down to reveal it. 
+  // No more 160vh dead zone. No more scrolling resistance!
   const caseStudiesY = useTransform(
     scrollYProgress, 
-    [0.35, 0.45, 0.85, 1], 
+    [0.35, 0.45, 0.75, 1], 
     ["120%", "0%", "0%", "120%"]
   );
 
   const servicesOpacity = useTransform(scrollYProgress, [0.35, 0.45], [1, 0]);
   
   const servicesPointerEvents = useTransform(scrollYProgress, [0, 0.40], ["auto", "none"]);
+  
+  // We also fade the pointer events out earlier so the browser doesn't 
+  // physically stutter when you scroll backwards into the component.
   const caseStudiesPointerEvents = useTransform(
     scrollYProgress, 
-    [0, 0.35, 0.45, 0.85, 0.95, 1], 
+    [0, 0.35, 0.45, 0.75, 0.85, 1], 
     ["none", "none", "auto", "auto", "none", "none"]
   );
 
@@ -83,8 +90,7 @@ const WorkTransitionWrapper = () => {
         </div>
       </div>
 
-      {/* LAYER 3: Process Grid (Mapped to Case Studies!) */}
-      {/* ADDED: id="case-studies" right here so the Navbar can lock onto it */}
+      {/* LAYER 3: Process Grid */}
       <div id="case-studies" style={{ position: "relative", zIndex: 1, marginTop: "-100vh" }}>
         <ProcessGrid />
       </div>

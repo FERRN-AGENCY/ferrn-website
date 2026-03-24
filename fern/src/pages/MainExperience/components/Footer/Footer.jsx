@@ -64,7 +64,7 @@ const Footer = () => {
                 key={item.id} 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className={`${styles.socialBox} ${idx === 0 ? styles.activeSocial : ''}`}
+                className={styles.socialBox}
               >
                 {item.icon}
               </a>

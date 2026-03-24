@@ -145,49 +145,66 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 80px;
-  height: 80px;
+  /* THE FIX: Removed fixed width/height and made it rectangular */
+  width: auto;
+  height: auto;
+  padding: 10px 20px; 
   background-color: #F94406; /* Brand Orange */
   color: #FFFFFF;
-  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 14px;
   font-weight: 600;
-  pointer-events: none; /* ESSENTIAL: Lets clicks pass through to the cards below */
+  pointer-events: none; /* Lets clicks pass through */
   z-index: 9999;
   box-shadow: 0 10px 20px rgba(249, 68, 6, 0.4);
+  white-space: nowrap; /* Prevents text from breaking into two lines */
 }
 
 /* Hide the standard overlay text on Desktop so it doesn't clash with the custom cursor */
-@media (min-width: 769px) {
+@media (hover: hover) and (pointer: fine) {
   .mobileTag {
     display: none;
   }
-}
 
 /* =========================================
    MOBILE RESPONSIVENESS
    ========================================= */
 @media (max-width: 768px) {
   
+  /* Aggressively hide the custom cursor on mobile just in case */
+  .customCursor {
+    display: none !important;
+  }
+
   /* Hides the "Add Project" placeholders completely on small screens */
   .placeholder {
     display: none !important;
   }
   
-  /* Ensures the normal overlay tag shows up on mobile where the custom cursor is disabled */
+  /* The normal overlay tag shows up on mobile where the custom cursor is disabled */
   .mobileTag {
     display: block;
-    /* Add whatever styling you had for .tag here */
     background-color: #F94406;
     color: white;
-    padding: 6px 12px;
-    border-radius: 20px;
+    padding: 8px 16px;
     font-size: 12px;
     font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transform: skewX(-15deg);
+    box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.3);
   }
+
+  .mobileTag span {
+    display: block;
+    transform: skewX(15deg);
+  }
+  
+}
+  
+ 
   
 }
 /* PLACEHOLDER CARD */
@@ -245,4 +262,54 @@
   .image {
     filter: brightness(0.8);
   }
+}
+
+/* =========================================
+   DESKTOP / MOUSE-ONLY HOVERS
+   ========================================= */
+/* This media query ensures that "hover" CSS only applies to devices with a real mouse pointer, fixing the sticky mobile tap issue! */
+@media (hover: hover) and (pointer: fine) {
+  .mobileTag {
+    display: none;
+  }
+  
+  /* If you have any .card:hover effects, put them inside this block too! */
+}
+
+/* =========================================
+   MOBILE RESPONSIVENESS
+   ========================================= */
+@media (max-width: 768px) {
+  
+  /* Aggressively hide the custom cursor on mobile just in case */
+  .customCursor {
+    display: none !important;
+  }
+
+  /* Hides the "Add Project" placeholders completely on small screens */
+  .placeholder {
+    display: none !important;
+  }
+  .categoryCard{
+    display: none;
+  }
+  /* The normal overlay tag shows up on mobile where the custom cursor is disabled */
+  .mobileTag {
+    display: block;
+    background-color: #F94406;
+    color: white;
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transform: skewX(-15deg);
+    box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.3);
+  }
+
+  .mobileTag span {
+    display: block;
+    transform: skewX(15deg);
+  }
+  
 }

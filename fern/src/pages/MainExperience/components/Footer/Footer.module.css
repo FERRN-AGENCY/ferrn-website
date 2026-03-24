@@ -67,13 +67,9 @@
 
 .socialBox:hover {
   background-color: #222222;
-  color: #FFFFFF; 
+  /* Make the icon turn orange instead of white on hover */
+  color: var(--brand-orange, #F94406); 
 }
-
-.activeSocial {
-  color: var(--brand-orange, #FF5A00); 
-}
-
 /* =========================================
    3D FLIPPING LOGO CUBE
    ========================================= */

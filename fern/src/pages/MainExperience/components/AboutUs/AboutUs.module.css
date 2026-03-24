@@ -124,7 +124,7 @@
    ========================================== */
 @media (max-width: 468px) {
   .contentWrapper {
-    display: contents; 
+    display: block; 
   }
   .displayColumn {
     order: 2;

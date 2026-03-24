@@ -1,5 +1,4 @@
 import { useState, useEffect, useMemo, useContext } from 'react';
-// Added useMotionValue and useSpring for the interactive mouse
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 import images from '../../../../images';
 
@@ -27,7 +26,6 @@ const ProcessGrid = ({
   const [isMobile, setIsMobile] = useState(false);
   const [isHoveringProject, setIsHoveringProject] = useState(false);
 
-  // Framer Motion values for buttery smooth cursor tracking
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
   const springConfig = { damping: 25, stiffness: 700, mass: 0.5 };
@@ -44,9 +42,10 @@ const ProcessGrid = ({
   // Track mouse movement across the grid container
   const handleMouseMove = (e) => {
     if (isMobile) return;
-    // Offsetting by 40px centers the 80x80 custom cursor on the mouse pointer
-    cursorX.set(e.clientX - 40);
-    cursorY.set(e.clientY - 40);
+    // THE FIX: Adjusted the offset for a rectangular button 
+    // (Subtracting roughly half the width and height to center it)
+    cursorX.set(e.clientX - 75); 
+    cursorY.set(e.clientY - 20); 
   };
 
   const filledGrid = useMemo(() => {
@@ -94,7 +93,7 @@ const ProcessGrid = ({
       onMouseMove={handleMouseMove}
     >
       
-      {/* THE INTERACTIVE CUSTOM CURSOR (Hidden on mobile) */}
+      {/* THE INTERACTIVE CUSTOM CURSOR */}
       {!isMobile && (
         <motion.div
           className={styles.customCursor}
@@ -105,7 +104,8 @@ const ProcessGrid = ({
             opacity: isHoveringProject ? 1 : 0,
           }}
         >
-          View
+          {/* THE FIX: Changed text to Read Case Study */}
+          Read Case Study
         </motion.div>
       )}
 
@@ -140,16 +140,16 @@ const ProcessGrid = ({
         </div>
 
         {/* GRID */}
-        <div className={styles.grid}>
+        {/* THE FIX: Moved the hover triggers to the ENTIRE grid wrapper */}
+        <div 
+          className={styles.grid}
+          onMouseEnter={() => setIsHoveringProject(true)}
+          onMouseLeave={() => setIsHoveringProject(false)}
+        >
           {filledGrid.map((item) => (
             <div
               key={item.id}
               className={`${styles.card} ${item.isPlaceholder ? styles.placeholder : ''} ${item.isCategoryCard ? styles.categoryCard : ''}`}
-              // Trigger the custom cursor ONLY when hovering real projects
-              onMouseEnter={() => {
-                if (!item.isPlaceholder && !item.isCategoryCard) setIsHoveringProject(true);
-              }}
-              onMouseLeave={() => setIsHoveringProject(false)}
             >
               {item.isCategoryCard && (
                 <div className={styles.categoryCardContent}>
@@ -164,12 +164,11 @@ const ProcessGrid = ({
                     alt={item.title}
                     className={styles.image}
                   />
-                {/* Replace your current overlay div with this: */}
-                <div className={styles.overlay}>
+                  <div className={styles.overlay}>
                     <div className={styles.mobileTag}>
-                        <span>Read Case Study</span>
+                        <span>{caseStudyText}</span>
                     </div>
-                </div>
+                  </div>
                 </>
               )}
 

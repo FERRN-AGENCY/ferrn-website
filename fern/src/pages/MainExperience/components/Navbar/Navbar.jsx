@@ -35,8 +35,6 @@ const Navbar = () => {
     }
 
     // 2. PAGE TRACKING LOGIC (Scroll Spy)
-    // We loop backwards through the links. The first section we find whose 
-    // top edge has crossed the top 1/3rd of the screen becomes the active link!
     let currentActiveSection = activeLink;
     
     for (let i = navLinks.length - 1; i >= 0; i--) {
@@ -45,10 +43,9 @@ const Navbar = () => {
       
       if (element) {
         const rect = element.getBoundingClientRect();
-        // If the top of the section is in the top third of the viewport (or higher)
         if (rect.top <= window.innerHeight / 3) {
           currentActiveSection = link;
-          break; // Stop looking once we find the active one
+          break; 
         }
       }
     }
@@ -99,17 +96,18 @@ const Navbar = () => {
                 <button
                   key={link}
                   className={`${styles.navLink} ${activeLink === link ? styles.activeLink : ''}`}
-                  onClick={() => handleNavClick(link)} // <-- Updated to trigger scroll
+                  onClick={() => handleNavClick(link)} 
                 >
                   {link}
                 </button>
               ))}
             </div>
 
-            {/* Block 3: The Phone Icon Square */}
+            {/* Block 3: The NEW Phone Icon Square */}
             <div className={styles.navBlock} onClick={() => handleNavClick('Contact')} style={{ cursor: 'pointer' }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand-orange)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="var(--brand-orange, #F94406)">
+                <path d="M19.95 15.38c-1.23 0-2.42-.2-3.53-.56-.35-.12-.74-.03-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/>
+                <path d="M19 3v3h3v2h-3v3h-2V8h-3V6h3V3h2z"/>
               </svg>
             </div>
 
