@@ -38,7 +38,7 @@
   padding: 10px 36px;
   font-size: 1.2rem;
   /* THE FIX: Replaced #888 with your dynamic --font-text variable */
-  color: var(--font-text);
+  color: var(--text-muted);
   cursor: pointer;
   transition: all 0.3s ease;
  /* Slight rounding looks better on these tabs */
@@ -119,7 +119,11 @@
 
 /* DYNAMIC CENTER TILE STYLE */
 .categoryCard {
-  background: linear-gradient(135deg, #FF7A00 0%, #FF5A00 100%);
+  background: radial-gradient(
+    ellipse at center, 
+    #FF4500 55%, 
+    #FDB497 100%
+  );
   display: flex;
   align-items: center;
   justify-content: center;
@@ -134,7 +138,58 @@
   padding: 10px;
   line-height: 1.2;
 }
+/* =========================================
+   INTERACTIVE FLOATING CURSOR
+   ========================================= */
+.customCursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 80px;
+  height: 80px;
+  background-color: #F94406; /* Brand Orange */
+  color: #FFFFFF;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  pointer-events: none; /* ESSENTIAL: Lets clicks pass through to the cards below */
+  z-index: 9999;
+  box-shadow: 0 10px 20px rgba(249, 68, 6, 0.4);
+}
 
+/* Hide the standard overlay text on Desktop so it doesn't clash with the custom cursor */
+@media (min-width: 769px) {
+  .mobileTag {
+    display: none;
+  }
+}
+
+/* =========================================
+   MOBILE RESPONSIVENESS
+   ========================================= */
+@media (max-width: 768px) {
+  
+  /* Hides the "Add Project" placeholders completely on small screens */
+  .placeholder {
+    display: none !important;
+  }
+  
+  /* Ensures the normal overlay tag shows up on mobile where the custom cursor is disabled */
+  .mobileTag {
+    display: block;
+    /* Add whatever styling you had for .tag here */
+    background-color: #F94406;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  
+}
 /* PLACEHOLDER CARD */
 .placeholder {
   /* THE FIX: Adapts to your light/dark mode variables instead of forced white transparency */

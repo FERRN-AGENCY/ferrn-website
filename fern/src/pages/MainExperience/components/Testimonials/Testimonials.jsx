@@ -4,14 +4,32 @@ import { SectionTitle, ActionButtons } from '../../../../components/common/Secti
 import { testimonialsData } from '../../../../data/homeData';
 import styles from './Testimonials.module.css';
 
+// Helper to format seconds into 0:00
+const formatTime = (timeInSeconds) => {
+  if (isNaN(timeInSeconds)) return "0:00";
+  const m = Math.floor(timeInSeconds / 60);
+  const s = Math.floor(timeInSeconds % 60);
+  return `${m}:${s < 10 ? '0' : ''}${s}`;
+};
+
+// A hand-crafted array of heights to simulate a realistic audio waveform
+// Double the numbers = half the thickness!
+const waveHeights = [
+  20, 30, 45, 60, 80, 100, 85, 60, 45, 30, 
+  25, 40, 60, 85, 100, 80, 55, 35, 45, 70, 
+  95, 80, 50, 30, 40, 60, 85, 100, 75, 50, 
+  35, 25, 40, 65, 80, 90, 70, 40, 30, 50,
+  80, 100, 90, 60, 40, 30, 20, 35, 55, 85,
+];
+
 const AudioCard = ({ item, isCenter, isPlaying, positionOffset, onPlay, onAudioEnd, onDragEnd }) => {
   const audioRef = useRef(null);
   
   const [progress, setProgress] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [transcript, setTranscript] = useState(null);
 
-  // 1. Auto-close transcript if the card is dragged away from the center
   useEffect(() => {
     if (!isCenter) {
       setTranscript(null);
@@ -19,7 +37,6 @@ const AudioCard = ({ item, isCenter, isPlaying, positionOffset, onPlay, onAudioE
     }
   }, [isCenter]);
 
-  // 2. Audio Sync
   useEffect(() => {
     if (isPlaying && audioRef.current) {
       audioRef.current.play().catch(e => console.log("Audio play blocked:", e));
@@ -28,16 +45,15 @@ const AudioCard = ({ item, isCenter, isPlaying, positionOffset, onPlay, onAudioE
     }
   }, [isPlaying]);
 
-  // 3. Live Waveform Math
   const handleTimeUpdate = () => {
     if (audioRef.current) {
       const current = audioRef.current.currentTime;
       const total = audioRef.current.duration;
+      setCurrentTime(current);
       setProgress(total > 0 ? current / total : 0);
     }
   };
 
-  // 4. SORTED API: Clean frontend simulation
   const handleTranscribe = async () => {
     if (transcript) {
       setTranscript(null); 
@@ -56,11 +72,8 @@ const AudioCard = ({ item, isCenter, isPlaying, positionOffset, onPlay, onAudioE
     }
   };
 
-  const totalBars = 30;
-
-  // 5. THE FLAT MATH (Straight horizontal slide)
   const xValue = `${positionOffset * 105}%`; 
-  const yValue = isCenter ? -20 : 0; // Just a clean pop upwards for the active card
+  const yValue = isCenter ? -20 : 0; 
 
   return (
     <motion.div 
@@ -68,7 +81,7 @@ const AudioCard = ({ item, isCenter, isPlaying, positionOffset, onPlay, onAudioE
       animate={{ 
         x: xValue, 
         y: yValue, 
-        scale: isCenter ? 1.1 : 0.85, // Center is noticeably larger
+        scale: isCenter ? 1.1 : 0.85, 
         opacity: isCenter ? 1 : 0.35,
         zIndex: isCenter ? 10 : 5 - Math.abs(positionOffset)
       }}
@@ -79,47 +92,61 @@ const AudioCard = ({ item, isCenter, isPlaying, positionOffset, onPlay, onAudioE
       onDragEnd={onDragEnd}
       onClick={() => { if (!isCenter) onPlay(); }} 
     >
-      {/* Image Block */}
       <div className={styles.imageContainer}>
         <img src={item.imageUrl} alt={item.name} className={styles.clientImage} />
         <div className={styles.nameTag}>{item.name}, {item.role}</div>
       </div>
 
-      {/* Player UI */}
       <div className={styles.playerContainer}>
         <button className={styles.playBtn} onClick={(e) => { e.stopPropagation(); onPlay(); }}>
           {isPlaying ? (
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--brand-orange)"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+            // Added rx="1" to slightly round the pause bars
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--brand-orange, #F94406)">
+              <rect x="6" y="5" width="4" height="14" rx="1"/>
+              <rect x="14" y="5" width="4" height="14" rx="1"/>
+            </svg>
           ) : (
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--brand-orange)"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--brand-orange, #F94406)">
+              <polygon points="6 4 19 12 6 20 6 4"/>
+            </svg>
           )}
         </button>
 
-        {/* Live Filling Waveform */}
+        {/* Live Filling Waveform using the realistic array */}
         <div className={styles.waveform}>
-          {[...Array(totalBars)].map((_, i) => {
-            const isActiveBar = (i / totalBars) <= progress;
+          {waveHeights.map((height, i) => {
+            const isActiveBar = (i / waveHeights.length) <= progress;
             return (
               <div 
                 key={i} 
                 className={`${styles.waveBar} ${isActiveBar ? styles.waveBarActive : ''}`} 
-                style={{ height: i % 2 === 0 ? '60%' : i % 3 === 0 ? '30%' : '100%' }}
+                style={{ height: `${height}%` }}
               />
             );
           })}
         </div>
+
+        {/* The Timer */}
+        <div className={styles.timer}>
+          {formatTime(currentTime)}
+        </div>
         
-        <audio ref={audioRef} src={item.audioUrl} onEnded={onAudioEnd} onTimeUpdate={handleTimeUpdate} preload="metadata"/>
+        <audio 
+          ref={audioRef} 
+          src={item.audioUrl} 
+          onEnded={onAudioEnd} 
+          onTimeUpdate={handleTimeUpdate} 
+          preload="metadata"
+        />
       </div>
 
-      {/* Transcription UI */}
       <div className={styles.transcriptionWrapper}>
         <button 
           className={styles.transcribeToggle} 
           onClick={(e) => { e.stopPropagation(); handleTranscribe(); }}
           disabled={isTranscribing || !isCenter} 
         >
-          {isTranscribing ? "Generating AI Transcript..." : transcript ? "Hide Transcript" : "Read Transcript"}
+          {isTranscribing ? "Generating AI Transcript..." : transcript ? "Hide Transcript" : "Transcribe"}
         </button>
         
         <AnimatePresence>
@@ -208,9 +235,9 @@ const Testimonials = () => {
 
       <div className={styles.footerButtons}>
         <ActionButtons 
-          ghostText="I have a custom question" 
+          ghostText="I have one more question" 
           ghostLink="/contact"
-          primaryText="I want some process" 
+          primaryText="I want to join them" 
           primaryLink="/process"
         />
       </div>

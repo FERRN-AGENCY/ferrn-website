@@ -2,78 +2,93 @@ import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import OurServices from './Services/OurServices'; 
 import CaseStudies from './CaseStudies/CaseStudies'; 
+import ProcessGrid from './ProcessGrid/ProcessGrid'; 
 
 const WorkTransitionWrapper = () => {
-  const containerRef = useRef(null);
+  const runwayRef = useRef(null);
   
   const { scrollYProgress } = useScroll({
-    target: containerRef,
+    target: runwayRef,
     offset: ["start start", "end end"]
   });
 
-  // The mechanical shutter effect: 4 Orange Walls closing in
-  const edgeThickness = useTransform(scrollYProgress, [0.1, 0.35], ["0%", "52%"]);
+  const caseStudiesY = useTransform(
+    scrollYProgress, 
+    [0.35, 0.45, 0.85, 1], 
+    ["120%", "0%", "0%", "120%"]
+  );
 
-  // Perfect Crossfade: Services vanishes as Case Studies appears
   const servicesOpacity = useTransform(scrollYProgress, [0.35, 0.45], [1, 0]);
-  const caseStudiesOpacity = useTransform(scrollYProgress, [0.35, 0.45], [0, 1]);
   
-  // THE FIX: The Glass Shield Armor
-  // 1. Turns OFF Our Services clicks when it fades away
-  const servicesPointerEvents = useTransform(scrollYProgress, [0, 0.35], ["auto", "none"]);
-  // 2. Turns OFF Case Studies clicks when it is invisible at the top
-  const caseStudiesPointerEvents = useTransform(scrollYProgress, [0.1, 0.35], ["none", "auto"]);
+  const servicesPointerEvents = useTransform(scrollYProgress, [0, 0.40], ["auto", "none"]);
+  const caseStudiesPointerEvents = useTransform(
+    scrollYProgress, 
+    [0, 0.35, 0.45, 0.85, 0.95, 1], 
+    ["none", "none", "auto", "auto", "none", "none"]
+  );
 
   return (
-    <div ref={containerRef} style={{ height: "400vh", position: "relative" }}>
-      <motion.div 
+    <div style={{ position: "relative", width: "100%", backgroundColor: "var(--bg-primary)" }}>
+      
+      <div 
+        ref={runwayRef} 
         style={{ 
-          position: "sticky", 
-          top: 0, 
-          height: "100vh", 
-          backgroundColor: "var(--bg-primary)",
-          overflow: "hidden" 
+          height: "400vh", 
+          position: "relative", 
+          zIndex: 10,
+          pointerEvents: "none" 
         }}
       >
         
-        {/* THE SHUTTER EFFECT: 4 Orange Walls */}
-        <motion.div style={{ position: "absolute", top: 0, left: 0, right: 0, height: edgeThickness, backgroundColor: "#F94406", zIndex: 0 }} />
-        <motion.div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: edgeThickness, backgroundColor: "#F94406", zIndex: 0 }} />
-        <motion.div style={{ position: "absolute", top: 0, bottom: 0, left: 0, width: edgeThickness, backgroundColor: "#F94406", zIndex: 0 }} />
-        <motion.div style={{ position: "absolute", top: 0, bottom: 0, right: 0, width: edgeThickness, backgroundColor: "#F94406", zIndex: 0 }} />
-
-
-        {/* Layer 1: OurServices */}
-        <motion.div 
+        <div 
           style={{ 
-            position: "absolute", 
-            inset: 0, 
-            opacity: servicesOpacity,
-            pointerEvents: servicesPointerEvents,
-            zIndex: 1
+            position: "sticky", 
+            top: 0, 
+            height: "100vh", 
+            overflow: "hidden", 
+            pointerEvents: "none" 
           }}
         >
-          <OurServices scrollProgress={scrollYProgress} />
-        </motion.div>
+          
+          {/* LAYER 1: Our Services */}
+          <motion.div 
+            style={{ 
+              position: "absolute", 
+              inset: 0, 
+              opacity: servicesOpacity,
+              pointerEvents: servicesPointerEvents,
+            }}
+          >
+            <OurServices scrollProgress={scrollYProgress} />
+          </motion.div>
 
-        {/* Layer 2: Case Studies */}
-        <motion.div 
-          style={{ 
-            position: "absolute", 
-            inset: 0, 
-            opacity: caseStudiesOpacity, 
-            pointerEvents: caseStudiesPointerEvents, /* THE FIX: Applied the shield breaker here */
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 2
-          }}
-        >
-          <CaseStudies scrollProgress={scrollYProgress} />
-        </motion.div>
+          {/* LAYER 2: Case Studies (The Orange Curtain) */}
+          <motion.div 
+            style={{ 
+              position: "absolute", 
+              inset: 0, 
+              y: caseStudiesY, 
+              background: "linear-gradient(to bottom, var(--bg-primary) 0%, #F94406 10%, #F94406 90%, var(--bg-primary) 100%)",
+              boxShadow: "0px -20px 50px rgba(0,0,0,0.3)", 
+              pointerEvents: caseStudiesPointerEvents, 
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <CaseStudies scrollProgress={scrollYProgress} />
+          </motion.div>
 
-      </motion.div>
+        </div>
+      </div>
+
+      {/* LAYER 3: Process Grid (Mapped to Case Studies!) */}
+      {/* ADDED: id="case-studies" right here so the Navbar can lock onto it */}
+      <div id="case-studies" style={{ position: "relative", zIndex: 1, marginTop: "-100vh" }}>
+        <ProcessGrid />
+      </div>
+
     </div>
   );
 };

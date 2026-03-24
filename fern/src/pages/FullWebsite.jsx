@@ -20,34 +20,31 @@ const FullWebsite = () => {
       <MainExperience />
 
       {/* 2. About Us */}
-      <div style={{ marginBottom: "clamp(50px, 5vh, 90px)" }}>
+      <div id="about-us" style={{ marginBottom: "clamp(50px, 5vh, 90px)" }}>
         <AboutUs />
       </div>
 
       {/* 3. Our Clients */}
-      <div style={{ marginBottom: "clamp(40px, 5vh, 70px)" }}>
+      <div id="our-clients" style={{ marginBottom: "clamp(40px, 5vh, 70px)" }}>
         <OurClients />
       </div>
 
       {/* 4. The Cinematic Scroll (Services -> Case Studies) */}
-      <WorkTransitionWrapper />
-
-      {/* 5. Process Grid */}
-      <div style={{ marginBottom: "clamp(100px, 5vh, 150px)" }}>
-        <ProcessGrid />
+      <div id="services">
+        <WorkTransitionWrapper />
       </div>
 
-      {/* 6. Client Testimonials */}
-      <div style={{ marginBottom: "clamp(50px, 5vh, 100px)" }}>
+      {/* 5. Client Testimonials */}
+      <div id="testimonials" style={{ marginBottom: "clamp(50px, 5vh, 100px)" }}>
         <Testimonials />
       </div>
 
-      {/* 7. The Chat System */}
-      <div style={{ marginBottom: "50px 5vh 100px" }}>
+      {/* 6. The Chat System (Mapped to FAQ!) */}
+      <div id="faq" style={{ marginBottom: "clamp(50px, 5vh, 100px)" }}>
         <ChatSystem />
       </div>
 
-      {/* 8. The Footer */}
+      {/* 7. The Footer */}
       <Footer />
 
       {/* Floating Navbar */}

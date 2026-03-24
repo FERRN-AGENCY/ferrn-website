@@ -1,13 +1,47 @@
 import { motion } from 'framer-motion';
+// Swapped FaLink and FaDribbble for FaTiktok and FaWhatsapp
+import { FaInstagram, FaXTwitter, FaLinkedinIn, FaTiktok, FaWhatsapp, FaEnvelope } from 'react-icons/fa6';
 import styles from './Footer.module.css';
+import images from '../../../../images';
 
 const Footer = () => {
-  const socials = ['Ig', 'X', 'In', '🔗', 'Dr', 'Mail'];
+  // Updated array with the new icons and your live links
+  const socials = [
+    { 
+      id: 'ig', 
+      icon: <FaInstagram />, 
+      url: 'https://www.instagram.com/ferrn.agency?igsh=dWV5dmpyeDlocmht&utm_source=qr' 
+    },
+    { 
+      id: 'x', 
+      icon: <FaXTwitter />, 
+      url: 'https://x.com/ferrn_agency?s=21' 
+    },
+    { 
+      id: 'in', 
+      icon: <FaLinkedinIn />, 
+      url: 'https://www.linkedin.com/company/ferrn/' 
+    },
+    { 
+      id: 'tiktok', 
+      icon: <FaTiktok />, 
+      url: 'https://www.tiktok.com/@ferrnagency?_r=1&_t=ZS-94wI3R63lyf' 
+    },
+    { 
+      id: 'wa', 
+      icon: <FaWhatsapp />, 
+      url: 'https://wa.me/message/ZTLSJYGV6PI2L1' 
+    },
+    { 
+      id: 'mail', 
+      icon: <FaEnvelope />, 
+      url: 'mailto:ferrnagency@gmail.com' 
+    },
+  ];
 
   return (
     <footer className={styles.footerWrapper}>
       
-      {/* The Giant Background Watermark — slowly drifts left on loop */}
       <motion.div
         className={styles.watermark}
         animate={{ x: ['0%', '-50%'] }}
@@ -20,33 +54,49 @@ const Footer = () => {
         BYE,&nbsp;BYE,&nbsp;BYE,&nbsp;BYE,&nbsp;BYE,&nbsp;BYE,&nbsp;
       </motion.div>
 
-      {/* The Main Footer Card */}
       <div className={styles.footerCard}>
         
-        {/* Top Half: Socials & Logo */}
         <div className={styles.topSection}>
           <div className={styles.socialGrid}>
             {socials.map((item, idx) => (
-              <a href="#" key={idx} className={`${styles.socialBox} ${idx === 0 ? styles.activeSocial : ''}`}>
-                {item}
+              <a 
+                href={item.url} 
+                key={item.id} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className={`${styles.socialBox} ${idx === 0 ? styles.activeSocial : ''}`}
+              >
+                {item.icon}
               </a>
             ))}
           </div>
           
-          <div className={styles.logoBox}>
-            <img src="/ferrn-logo.svg" alt="Ferrn Agency" className={styles.footerLogo} />
-            <span className={styles.logoText}>FERRN AGENCY</span>
+          {/* THE FIXED 3D FLIPPING CUBE */}
+          <div className={styles.logoBoxScene}>
+            <div className={styles.logoBoxCube}>
+              
+              {/* FRONT FACE: Pure White Text, NO Logo */}
+              <div className={`${styles.cubeFace} ${styles.cubeFront}`}>
+                <span className={styles.logoTextWhite}>FERRN AGENCY</span>
+              </div>
+
+              {/* BOTTOM FACE: Logo + Orange Text */}
+              <div className={`${styles.cubeFace} ${styles.cubeBottom}`}>
+                <img src={images.Fernlogo} alt="Ferrn Logo" className={styles.footerLogo} />
+                {/* <span className={styles.logoTextOrange}>FERRN</span> */}
+              </div>
+
+            </div>
           </div>
         </div>
 
-        {/* Bottom Half: Call to Action */}
         <div className={styles.bottomSection}>
           <div className={styles.ctaText}>
             <p className={styles.subtext}>Have a project ?</p>
             <h2 className={styles.maintext}>Let's make it epic</h2>
           </div>
           
-          <button className={styles.startBtn}>Start now!</button>
+          <button className={styles.startBtn}>Book a call</button>
         </div>
 
       </div>

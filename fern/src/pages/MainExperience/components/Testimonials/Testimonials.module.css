@@ -77,12 +77,12 @@
    PLAYER & TRANSCRIPT UI
    ========================================= */
 .playerContainer {
-  background-color: var(--bg-secondary);
-  padding: 16px;
+  background-color: var(--bg-secondary, #141414);
+  padding: 16px 20px;
   display: flex;
   align-items: center;
   gap: 15px;
-  border-top: 1px solid var(--bg-primary); 
+  border-top: 1px solid rgba(255, 255, 255, 0.05); 
 }
 
 .playBtn {
@@ -93,6 +93,7 @@
   align-items: center;
   justify-content: center;
   padding: 0;
+  flex-shrink: 0;
 }
 
 /* FULL WIDTH Waveform */
@@ -100,28 +101,42 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 2px;
-  flex: 1; /* Pushes it across the whole remaining width */
-  height: 24px;
+  gap: 3px; /* Slightly wider gap looks better with pill shapes */
+  flex: 1; 
+  height: 28px; /* Tall enough to show the wave definition */
 }
 
 .waveBar {
   flex: 1;
-  height: 100%;
-  background-color: var(--bg-text); /* Base theme grey */
-  border-radius: 2px;
+  /* Dark Grey for inactive bars (matches screenshot) */
+  background-color: #444444; 
+  /* Rounded edges */
+  border-radius: 2px; 
+  width: 3px;
   transition: background-color 0.1s ease;
 }
 
-/* Orange fill as audio progresses */
+/* White fill as audio progresses */
 .waveBarActive {
-  background-color: var(--brand-orange); 
+  background-color: #FFFFFF; 
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.2); /* Slight glow */
+}
+
+/* The Timer */
+.timer {
+  color: #AAAAAA; /* Light grey text */
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums; /* Keeps the numbers from jittering */
+  flex-shrink: 0;
+  width: 32px; /* Fixed width so it doesn't jump around */
+  text-align: right;
 }
 
 /* Transcription Toggle */
 .transcriptionWrapper {
-  background-color: var(--bg-secondary);
-  padding: 0 16px 16px 16px;
+  background-color: var(--bg-secondary, #141414);
+  padding: 0 20px 16px 20px;
   display: flex;
   flex-direction: column;
 }
@@ -129,25 +144,25 @@
 .transcribeToggle {
   background: none;
   border: none;
-  color: var(--brand-orange);
+  color: var(--brand-orange, #F94406);
   font-size: 0.85rem;
-  font-weight: 600;
+  font-weight: 400;
   cursor: pointer;
-  text-align: left;
+  text-align: center; /* Centered like in the screenshot */
   padding: 8px 0;
 }
 
 .transcribeToggle:disabled {
-  color: var(--font-text);
+  color: #555555;
   cursor: not-allowed;
 }
 
 .transcriptBox {
   font-size: 0.9rem;
-  color: var(--text-primary);
+  color: #E0E0E0;
   line-height: 1.5;
   padding-top: 12px;
-  border-top: 1px solid var(--bg-tertiary);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
   animation: fadeIn 0.3s ease;
 }
 

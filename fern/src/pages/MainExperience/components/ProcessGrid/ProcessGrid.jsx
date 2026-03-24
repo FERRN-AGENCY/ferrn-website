@@ -1,4 +1,6 @@
-import { useState, useMemo, useContext } from 'react';
+import { useState, useEffect, useMemo, useContext } from 'react';
+// Added useMotionValue and useSpring for the interactive mouse
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 import images from '../../../../images';
 
 import { SectionTitle, ActionButtons } from '../../../../components/common/SectionHeaders';
@@ -10,9 +12,9 @@ import styles from './ProcessGrid.module.css';
 const ProcessGrid = ({
   title = "The story behind the work,",
   caseStudyText = "Read Case Study",
-  ghostText = "Where do Project files live",
+  ghostText = "Where’s My Project? Bob Knows",
   ghostLink = "/files",
-  primaryText = "Let's make it epic",
+  primaryText = "Let’s Make Yours Next",
   primaryLink = "/contact",
 }) => {
   const userCtx = useContext(UserContext);
@@ -20,6 +22,32 @@ const ProcessGrid = ({
   const subtitle = `want to see the process ${displayName}?`;
 
   const [activeFilter, setActiveFilter] = useState(processTags[0]);
+  
+  // --- INTERACTIVE MOUSE STATE ---
+  const [isMobile, setIsMobile] = useState(false);
+  const [isHoveringProject, setIsHoveringProject] = useState(false);
+
+  // Framer Motion values for buttery smooth cursor tracking
+  const cursorX = useMotionValue(-100);
+  const cursorY = useMotionValue(-100);
+  const springConfig = { damping: 25, stiffness: 700, mass: 0.5 };
+  const cursorXSpring = useSpring(cursorX, springConfig);
+  const cursorYSpring = useSpring(cursorY, springConfig);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Track mouse movement across the grid container
+  const handleMouseMove = (e) => {
+    if (isMobile) return;
+    // Offsetting by 40px centers the 80x80 custom cursor on the mouse pointer
+    cursorX.set(e.clientX - 40);
+    cursorY.set(e.clientY - 40);
+  };
 
   const filledGrid = useMemo(() => {
     const categoryData = processGridData.filter((item) => {
@@ -61,7 +89,26 @@ const ProcessGrid = ({
   }, [activeFilter]);
 
   return (
-    <section className={styles.gridContainer}>
+    <section 
+      className={styles.gridContainer} 
+      onMouseMove={handleMouseMove}
+    >
+      
+      {/* THE INTERACTIVE CUSTOM CURSOR (Hidden on mobile) */}
+      {!isMobile && (
+        <motion.div
+          className={styles.customCursor}
+          style={{
+            x: cursorXSpring,
+            y: cursorYSpring,
+            scale: isHoveringProject ? 1 : 0,
+            opacity: isHoveringProject ? 1 : 0,
+          }}
+        >
+          View
+        </motion.div>
+      )}
+
       <div className={styles.inner}>
 
         {/* THE ARMORED HEADER */}
@@ -71,7 +118,7 @@ const ProcessGrid = ({
           gap: "20px",
           width: "100%", 
           position: "relative", 
-          zIndex: 50, /* Keeps it above the grid items */
+          zIndex: 50, 
           marginBottom: "30px"
         }}>
           
@@ -98,6 +145,11 @@ const ProcessGrid = ({
             <div
               key={item.id}
               className={`${styles.card} ${item.isPlaceholder ? styles.placeholder : ''} ${item.isCategoryCard ? styles.categoryCard : ''}`}
+              // Trigger the custom cursor ONLY when hovering real projects
+              onMouseEnter={() => {
+                if (!item.isPlaceholder && !item.isCategoryCard) setIsHoveringProject(true);
+              }}
+              onMouseLeave={() => setIsHoveringProject(false)}
             >
               {item.isCategoryCard && (
                 <div className={styles.categoryCardContent}>
@@ -112,9 +164,12 @@ const ProcessGrid = ({
                     alt={item.title}
                     className={styles.image}
                   />
-                  <div className={styles.overlay}>
-                    <span className={styles.tag}>{caseStudyText}</span>
-                  </div>
+                {/* Replace your current overlay div with this: */}
+                <div className={styles.overlay}>
+                    <div className={styles.mobileTag}>
+                        <span>Read Case Study</span>
+                    </div>
+                </div>
                 </>
               )}
 

@@ -1,111 +1,96 @@
 import { useState, useEffect, useContext, useRef } from 'react';
-import { motion, AnimatePresence, useTransform, useMotionValue } from 'framer-motion';
+import { motion, AnimatePresence, useTransform, useMotionValue, useMotionValueEvent } from 'framer-motion';
 import { UserContext } from '../../../../context/UserContext';
 import images from '../../../../images'; 
 import { SectionTitle, ActionButtons } from '../../../../components/common/SectionHeaders';
 import { servicesData } from '../../../../data/servicesData';
 import styles from './OurServices.module.css'; 
 
-import { RevealContainer, RevealItem } from '../../../../components/common/ScrollReveal';
-
 const OurServices = ({ scrollProgress }) => {
   const { userName } = useContext(UserContext);
   const displayName = userName ? userName : "friend";
   
-  const [activeService, setActiveService] = useState(servicesData[0] || {});
-  const [isInView, setIsInView] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const activeService = servicesData[activeIndex] || servicesData[0];
+  
   const videoRef = useRef(null);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
-    checkMobile(); 
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
 
   const fallbackScroll = useMotionValue(0);
   const sp = scrollProgress || fallbackScroll;
 
-  const textOpacity = useTransform(sp, [0.05, 0.25], [1, 0]);
-  const videoX = useTransform(sp, [0.1, 0.35], ["0vw", "-15vw"]); 
-  const videoScale = useTransform(sp, [0.1, 0.35], [1, 1.4]);
+  // 1. THE RESTORED SCRUB: Maps the first 30% of the wrapper's scroll to changing tabs
+  useMotionValueEvent(sp, "change", (latestScroll) => {
+    const scrubStart = 0.0;
+    const scrubEnd = 0.30; 
+
+    if (latestScroll >= scrubStart && latestScroll <= scrubEnd) {
+      const progress = (latestScroll - scrubStart) / (scrubEnd - scrubStart);
+      let mappedIndex = Math.floor(progress * servicesData.length);
+      mappedIndex = Math.max(0, Math.min(mappedIndex, servicesData.length - 1));
+
+      if (mappedIndex !== activeIndex) {
+        setActiveIndex(mappedIndex);
+      }
+    }
+  });
+
+  // 2. THE CLEAN FADE: Fades out the text/video just before the orange curtain rises
+  const textOpacity = useTransform(sp, [0.30, 0.38], [1, 0]);
 
   useEffect(() => {
-    if (videoRef.current && isInView) {
+    if (videoRef.current) {
       videoRef.current.currentTime = 0;
       videoRef.current.play().catch(() => {});
     }
-  }, [activeService, isInView]);
+  }, [activeService]);
 
-  // THE FIX 1: Abstracted the "Next Service" math into its own function
-  const handleNextService = () => {
-    if (!servicesData || servicesData.length === 0) return;
-    setActiveService((prev) => {
-      const nextIndex = (servicesData.findIndex((i) => i.id === prev?.id) + 1) % servicesData.length;
-      return servicesData[nextIndex];
-    });
+  const handleServiceClick = (index) => {
+    setActiveIndex(index);
   };
 
-  useEffect(() => {
-    if (!isInView || !servicesData || servicesData.length === 0) return;
-    // Uses the new function for the auto-timer
-    const rotateTimer = setInterval(handleNextService, 6000); 
-    return () => clearInterval(rotateTimer);
-  }, [isInView, activeService]); 
-
   return (
-    <RevealContainer 
-      className={styles.servicesContainer}
-      onViewportEnter={() => {
-        setIsInView(true);
-        if (servicesData && servicesData.length > 0) setActiveService(servicesData[0]);
-      }}
-      onViewportLeave={() => setIsInView(false)}
-    >
+    <section className={styles.servicesContainer}>
       
-      <RevealItem className={styles.bounds}>
+      <div className={styles.bounds}>
         <motion.div style={{ opacity: textOpacity }}>
           <SectionTitle mainText="Things we actually do well," dimText={`want some ${displayName}?`} customId="services-special-title" />
         </motion.div>
-      </RevealItem>
+      </div>
 
       <div className={styles.contentWrapper}>
         
-        <RevealItem className={styles.leftGridItem}>
+        <div className={styles.leftGridItem}>
           <motion.div className={styles.listColumn} style={{ opacity: textOpacity }}>
             {servicesData.map((service, index) => (
               <div
                 key={service?.id || index} 
-                className={`${styles.serviceItem} ${activeService?.id === service?.id ? styles.activeItem : ''}`}
-                onClick={() => setActiveService(service)}
+                className={`${styles.serviceItem} ${activeIndex === index ? styles.activeItem : ''}`}
+                onClick={() => handleServiceClick(index)}
               >
                 {service?.title}
               </div>
             ))}
           </motion.div>
-        </RevealItem>
+        </div>
 
-        <RevealItem className={styles.rightGridItem}>
+        <div className={styles.rightGridItem}>
           <motion.div 
             className={styles.imageColumn} 
             style={{ 
-              x: isMobile ? "0vw" : videoX, 
-              scale: isMobile ? 1 : videoScale, 
-              opacity: isMobile ? textOpacity : 1, 
-              transformOrigin: "center center",
-              cursor: "pointer", // THE FIX 2: Changes cursor to a hand so users know it is clickable
-              WebkitTapHighlightColor: "transparent" // Removes the ugly blue flash when tapping on mobile
+              opacity: textOpacity,
+              cursor: "pointer", 
+              WebkitTapHighlightColor: "transparent" 
             }}
-            onClick={handleNextService} // THE FIX 3: Clicking the video instantly loads the next service
+            onClick={() => handleServiceClick((activeIndex + 1) % servicesData.length)}
           >
+            {/* THE FIX: Pure opacity fading. No sliding sideways. */}
             <AnimatePresence mode="wait">
               <motion.div 
                 key={activeService?.id || 'empty'} 
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.4 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.4 }} 
                 className={styles.imageCard}
               >
                 {activeService?.video && images[activeService.video] && (
@@ -114,17 +99,17 @@ const OurServices = ({ scrollProgress }) => {
               </motion.div>
             </AnimatePresence>
           </motion.div>
-        </RevealItem>
+        </div>
 
       </div>
 
-      <RevealItem className={styles.bounds}>
+      <div className={styles.bounds}>
         <motion.div style={{ opacity: textOpacity }}>
           <ActionButtons ghostText="My service is not here? ... Ask Bob" ghostLink="mailto:bob@example.com" primaryText="I want some" primaryLink="/contact" />
         </motion.div>
-      </RevealItem>
+      </div>
 
-    </RevealContainer>
+    </section>
   );
 };
 
