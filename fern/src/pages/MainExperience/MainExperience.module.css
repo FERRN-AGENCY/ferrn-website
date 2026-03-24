@@ -90,6 +90,7 @@
 
 @media (max-width: 768px) {
   .heroHeadline {
+    width: 90%;
     margin: 0 auto 70px;
   }
 }

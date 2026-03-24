@@ -196,13 +196,13 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    transform: skewX(-15deg);
+    /* transform: skewX(-15deg); */
     box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.3);
   }
 
   .mobileTag span {
     display: block;
-    transform: skewX(15deg);
+    /* transform: skewX(15deg); */
   }
   
 }
@@ -306,13 +306,13 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    transform: skewX(-15deg);
+    /* transform: skewX(-15deg); */
     box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.3);
   }
 
   .mobileTag span {
     display: block;
-    transform: skewX(15deg);
+    /* transform: skewX(15deg); */
   }
   
 }
