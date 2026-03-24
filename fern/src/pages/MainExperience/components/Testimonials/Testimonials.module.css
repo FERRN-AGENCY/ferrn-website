@@ -108,11 +108,9 @@
 
 .waveBar {
   flex: 1;
-  /* Dark Grey for inactive bars (matches screenshot) */
   background-color: #444444; 
-  /* Rounded edges */
   border-radius: 2px; 
-  width: 3px;
+  /* REMOVED: width: 3px; */
   transition: background-color 0.1s ease;
 }
 
@@ -184,4 +182,26 @@
         width: 80%;
         margin: auto;
     }
+}
+/* =========================================
+   MOBILE RESPONSIVENESS
+   ========================================= */
+@media (max-width: 768px) {
+  
+  /* Shrink the padding and gap inside the player */
+  .playerContainer {
+    padding: 12px 15px;
+    gap: 10px;
+  }
+
+  /* Squeeze the bars much closer together on phones */
+  .waveform {
+    gap: 1px; 
+  }
+
+  /* Slightly shrink the timer so it takes up less space */
+  .timer {
+    font-size: 0.75rem;
+    width: 28px;
+  }
 }
