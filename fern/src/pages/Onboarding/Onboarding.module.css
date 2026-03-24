@@ -14,7 +14,6 @@
   position: absolute;
   /* Fluid top spacing: 45.43px on desktop, shrinks slightly on short screens */
   top: clamp(1.5rem, 5vh, 45.43px); 
-  left: 50%;
   transform: translateX(-50%); 
   display: flex;
   align-items: center;

@@ -21,7 +21,7 @@
   font-size: clamp(3rem, 8vw, 4.2rem); 
   /* 1em forces the SVG to perfectly match the font height */
   height: 1em; 
-  width: auto; 
+  /* width: auto;  */
   fill: #F94406; 
 }
 
