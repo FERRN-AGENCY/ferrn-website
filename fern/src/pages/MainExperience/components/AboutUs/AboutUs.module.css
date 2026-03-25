@@ -126,6 +126,7 @@
     .aboutContainer{
         width: 90%;
         margin: auto;
+        padding: 0%;
     }
   .contentWrapper {
     display: block; 

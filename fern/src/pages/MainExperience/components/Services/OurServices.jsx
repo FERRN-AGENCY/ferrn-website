@@ -12,11 +12,20 @@ const OurServices = ({ scrollProgress }) => {
   
   const [activeIndex, setActiveIndex] = useState(0);
   const activeService = servicesData[activeIndex] || servicesData[0];
+  const [isMobile, setIsMobile] = useState(false);
   
   const videoRef = useRef(null);
 
   const fallbackScroll = useMotionValue(0);
   const sp = scrollProgress || fallbackScroll;
+
+  // Mobile detection to keep mobile experience simple
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // 1. THE RESTORED SCRUB: Maps the first 30% of the wrapper's scroll to changing tabs
   useMotionValueEvent(sp, "change", (latestScroll) => {
@@ -34,8 +43,13 @@ const OurServices = ({ scrollProgress }) => {
     }
   });
 
-  // 2. THE CLEAN FADE: Fades out the text/video just before the orange curtain rises
+  // 2. THE TEXT FADE: Fades out ONLY the text before the orange curtain rises
   const textOpacity = useTransform(sp, [0.30, 0.38], [1, 0]);
+
+  // 3. THE VIDEO SLIDE: Moves the video left to the center of the screen
+  // -50% shifts it left by half of its own width. 
+  const videoXDesktop = useTransform(sp, [0.30, 0.45], ["0%", "-40%"]);
+  const videoX = isMobile ? "0%" : videoXDesktop;
 
   useEffect(() => {
     if (videoRef.current) {
@@ -77,13 +91,12 @@ const OurServices = ({ scrollProgress }) => {
           <motion.div 
             className={styles.imageColumn} 
             style={{ 
-              opacity: textOpacity,
+              x: videoX, /* THE FIX: The video now slides left based on scroll */
               cursor: "pointer", 
               WebkitTapHighlightColor: "transparent" 
             }}
             onClick={() => handleServiceClick((activeIndex + 1) % servicesData.length)}
           >
-            {/* THE FIX: Pure opacity fading. No sliding sideways. */}
             <AnimatePresence mode="wait">
               <motion.div 
                 key={activeService?.id || 'empty'} 
@@ -105,7 +118,7 @@ const OurServices = ({ scrollProgress }) => {
 
       <div className={styles.bounds}>
         <motion.div style={{ opacity: textOpacity }}>
-          <ActionButtons ghostText="My service is not here? ... Ask Bob" ghostLink="mailto:bob@example.com" primaryText="I want some" primaryLink="/contact" />
+          <ActionButtons ghostText="My service is not here? ... Ask Bob"  primaryText="I want some"  />
         </motion.div>
       </div>
 

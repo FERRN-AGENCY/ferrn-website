@@ -11,39 +11,85 @@ const AboutUs = () => {
   const { userName } = useContext(UserContext);
   const [activeTab, setActiveTab] = useState(aboutData[0].id);
   const [isInView, setIsInView] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
   const activeContent = aboutData.find(item => item.id === activeTab);
 
   // Activates Lenis smooth scroll for this page
   useLenis();
 
+  // Mobile detection to kill scroll animations on small screens
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobileState = window.innerWidth <= 768;
+      setIsMobile(mobileState);
+      if (mobileState) setIsInView(true); // Keep auto-rotation running on mobile
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Auto-rotation timer
   useEffect(() => {
     if (!isInView) return;
     const rotateTimer = setInterval(() => {
-      setActiveTab((prevTab) => {
-        const currentIndex = aboutData.findIndex((item) => item.id === prevTab);
-        const nextIndex = (currentIndex + 1) % aboutData.length;
-        return aboutData[nextIndex].id;
-      });
+      handleNextTab();
     }, 6000); 
     return () => clearInterval(rotateTimer);
   }, [isInView, activeTab]); 
 
+  // --- RESTORED SLIDE/SWIPE LOGIC ---
+  const handleNextTab = () => {
+    setActiveTab((prevTab) => {
+      const currentIndex = aboutData.findIndex((item) => item.id === prevTab);
+      const nextIndex = (currentIndex + 1) % aboutData.length;
+      return aboutData[nextIndex].id;
+    });
+  };
+
+  const handlePrevTab = () => {
+    setActiveTab((prevTab) => {
+      const currentIndex = aboutData.findIndex((item) => item.id === prevTab);
+      const prevIndex = (currentIndex - 1 + aboutData.length) % aboutData.length;
+      return aboutData[prevIndex].id;
+    });
+  };
+
+  const handleDragEnd = (event, info) => {
+    const threshold = 50; 
+    if (info.offset.x < -threshold) {
+      handleNextTab(); // Swiped left -> Next
+    } else if (info.offset.x > threshold) {
+      handlePrevTab(); // Swiped right -> Previous
+    }
+  };
+
+  // Dynamically strip out the scroll animations if on mobile
+  const Container = isMobile ? 'section' : RevealContainer;
+  const Item = isMobile ? 'div' : RevealItem;
+
+  const containerProps = isMobile 
+    ? { className: styles.aboutContainer } 
+    : {
+        className: styles.aboutContainer,
+        viewportMargin: "0px 0px -30% 0px",
+        onViewportEnter: () => setIsInView(true),
+        onViewportLeave: () => setIsInView(false)
+      };
+
   return (
-    <RevealContainer 
-      className={styles.aboutContainer}
-      viewportMargin="0px 0px -30% 0px"
-      onViewportEnter={() => setIsInView(true)}
-      onViewportLeave={() => setIsInView(false)}
-    >
+    <Container {...containerProps}>
       
-      <RevealItem>
+      <Item>
         <SectionTitle 
           mainText="Before we tell you about us," 
           dimText={`tell us about you, ${userName || 'friend'}.`} 
         />
-      </RevealItem>
+      </Item>
 
-      <RevealItem className={styles.contentWrapper}>
+      <Item className={styles.contentWrapper}>
         <div className={styles.tabsColumn}>
           {aboutData.map((item) => (
             <button
@@ -68,6 +114,7 @@ const AboutUs = () => {
               drag="x"
               dragConstraints={{ left: 0, right: 0 }}
               dragElastic={0.2}
+              onDragEnd={handleDragEnd} // <-- Hooked up the swipe logic here!
             >
               <div 
                 className={styles.imagePlaceholder}
@@ -92,18 +139,16 @@ const AboutUs = () => {
             </motion.div>
           </AnimatePresence>
         </div>
-      </RevealItem>
+      </Item>
 
-      <RevealItem>
+      <Item>
         <ActionButtons 
           ghostText="Got questions? Ask Bob."
-          ghostLink="mailto:bob@example.com"
           primaryText="Let's Discuss Your Idea"
-          primaryLink="/contact"
         />
-      </RevealItem>
+      </Item>
 
-    </RevealContainer>
+    </Container>
   );
 };
 

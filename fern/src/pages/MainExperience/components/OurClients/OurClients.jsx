@@ -1,10 +1,11 @@
-import { useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { UserContext } from '../../../../context/UserContext';
 import images from '../../../../images';
 import { clientsData } from '../../../../data/clientsData.js';
 
 import styles from './OurClients.module.css';
 import { SectionTitle, ActionButtons } from '../../../../components/common/SectionHeaders';
+import { RevealContainer, RevealItem } from '../../../../components/common/ScrollReveal';
 
 const row1 = clientsData.slice(0, 8);  
 const row2 = clientsData.slice(3, 12); 
@@ -40,33 +41,49 @@ const MarqueeTrack = ({ items, direction }) => (
 
 const OurClients = () => {
   const { userName } = useContext(UserContext);
+  const [isMobile, setIsMobile] = useState(false);
   
   // Securely checks for the user's inputted name, defaults to "friend"
   const displayName = userName ? userName : "friend";
 
+  // Mobile detection to kill scroll animations on small screens
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile(); // Check immediately on mount
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Dynamically switch components based on screen size
+  const Container = isMobile ? 'section' : RevealContainer;
+  const Item = isMobile ? 'div' : RevealItem;
+
   return (
-    <section className={styles.clientsContainer}>
-      <div className={styles.bounds}>
+    <Container className={styles.clientsContainer}>
+      
+      <Item className={styles.bounds}>
         <SectionTitle 
           mainText="Clients we didn't scare away," 
           dimText={`want to be next ${displayName}?`} 
         />
-      </div>
+      </Item>
 
-      <div className={styles.logoGrid}>
+      <Item className={styles.logoGrid}>
         <MarqueeTrack items={row1} direction="left" />
         <MarqueeTrack items={row2} direction="right" />
-      </div>
+      </Item>
 
-      <div className={styles.bounds}>
+      <Item className={styles.bounds}>
         <ActionButtons 
           ghostText="Curious… tell me more"
-          ghostLink="/faq"
           primaryText="Let’s do this"
-          primaryLink="/contact"
         />
-      </div>
-    </section>
+      </Item>
+      
+    </Container>
   );
 };
 

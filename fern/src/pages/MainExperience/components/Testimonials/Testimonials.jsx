@@ -236,9 +236,7 @@ const Testimonials = () => {
       <div className={styles.footerButtons}>
         <ActionButtons 
           ghostText="I have one more question" 
-          ghostLink="/contact"
           primaryText="I want to join them" 
-          primaryLink="/process"
         />
       </div>
     </section>

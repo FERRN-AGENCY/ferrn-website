@@ -192,9 +192,7 @@ const ProcessGrid = ({
         }}>
           <ActionButtons
             ghostText={ghostText}
-            ghostLink={ghostLink}
             primaryText={primaryText}
-            primaryLink={primaryLink}
           />
         </div>
 
