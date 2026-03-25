@@ -1,37 +1,37 @@
 export const aboutData = [
   {
     id: "startup-founder",
-    tabTitle: "Founder",
+    tabTitle: "Startup Founder",
     image: "founder", 
-    tags: ["Branding", "Website Development", "Product Design", "AI Automation"],
-    description: "You're building something new and need the right foundation. From brand identity to a scalable website and product experience. At Ferrn Creative Agency we help turn early ideas into strong digital products ready for launch."
+    tags: ["UI/UX & Product Design", "Branding & Identity", "Web Development", "Mobile App Development"],
+    description: "You’re turning an idea into something real — and you need the right foundation to get it there. We help you shape your concept, design a product people understand, and build a strong digital presence that’s ready for launch and growth."
   },
   {
-    id: "business-owner",
-    tabTitle: "Agency",
+    id: "agency-teams",
+    tabTitle: "Agency / Teams",
     image: "agency", 
-    tags: ["Scaling", "Process Optimization", "Rebranding"],
-    description: " Your business deserves a strong digital presence. We design and develop websites, systems, and brand experiences that help you attract customers and grow confidently."
+    tags: ["UI/UX & Product Design", "Web Development", "AI & Automation", "Branding & Identity"],
+    description: "You’re delivering for clients — and execution needs to be sharp, reliable, and fast. We work alongside your team to handle design, development, and systems so you can scale your output, take on bigger projects, and maintain a high standard across everything you deliver."
   },
   {
-    id: "brand-identity",
-    tabTitle: "Creator",
-    image: "creator", 
-    tags: ["Logo Design", "Style Guides", "Typography"],
-    description: " You need a brand that stands out. We craft strategic identities, visual systems, and brand guidelines that communicate your story clearly and consistently."
-  },
-  {
-    id: "ai-chatbot",
-    tabTitle: "Planner",
+    id: "event-planner",
+    tabTitle: "Event Planner",
     image: "planner", 
-    tags: ["AI Integration", "Customer Service", "Automation"],
-    description: "You want your website to do more than just display information. We build intelligent AI assistants that can answer questions, guide users, and automate support directly on your platform"
+    tags: ["Web Development", "AI & Automation", "Branding & Identity", "Digital Marketing Strategy"],
+    description: "You create memorable experiences — your online presence should build that same anticipation. We design and develop platforms that handle registrations, showcase your events beautifully, and make the entire process seamless for your audience."
   },
   {
-    id: "product-app",
-    tabTitle: "Web3",
+    id: "web3-startup",
+    tabTitle: "Web3 Startup",
     image: "web3", 
-    tags: ["UI/UX Design", "Prototyping", "App Development"],
-    description: "You have an idea for a digital product. We help shape the concept, design the experience, and develop the platform to bring it to life."
+    tags: ["Branding & Identity", "UI/UX & Product Design", "Web Development", "Digital Marketing Strategy"],
+    description: "You’re operating in a fast-moving space where clarity, trust, and attention are everything. We help you communicate your vision clearly, design intuitive user experiences, and build platforms that make it easy for users to engage with your product."
+  },
+  {
+    id: "personal-brand-creator",
+    tabTitle: "Personal Brand / Creator",
+    image: "creator", 
+    tags: ["Branding & Identity", "Web Development", "Social Media Management", "Digital Marketing Strategy"],
+    description: "You are the product and how you show up online matters. We help you build a cohesive, high-quality presence that reflects your value, grows your audience, and creates more opportunities around your brand."
   }
 ];

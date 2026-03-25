@@ -96,7 +96,13 @@ const Footer = () => {
             <h2 className={styles.maintext}>Let's make it epic</h2>
           </div>
           
-          <button className={styles.startBtn}>Book a call</button>
+          {/* THE FIX: Added the onClick event to open Cal.com */}
+          <button 
+            className={styles.startBtn}
+            onClick={() => window.open('https://cal.com/ferrn-agency/discovery-call', '_blank')}
+          >
+            Book a call
+          </button>
         </div>
 
       </div>

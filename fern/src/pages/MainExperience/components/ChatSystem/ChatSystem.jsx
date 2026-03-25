@@ -173,8 +173,11 @@ const ChatSystem = () => {
 
       </div>
 
-      {/* Bottom Button */}
-      <button className={styles.customQuestionBtn}>
+      {/* Bottom Button (Now links directly to Cal.com) */}
+      <button 
+        className={styles.customQuestionBtn}
+        onClick={() => window.open('https://cal.com/ferrn-agency/discovery-call', '_blank')}
+      >
         Book a call, before Spaces are filled
       </button>
 
