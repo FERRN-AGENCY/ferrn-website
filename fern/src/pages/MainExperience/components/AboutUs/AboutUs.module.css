@@ -125,7 +125,7 @@
 @media (max-width: 468px) {
     .aboutContainer{
         width: 90%;
-        margin: auto;
+        margin: 40px auto;
         padding: 0%;
     }
   .contentWrapper {
