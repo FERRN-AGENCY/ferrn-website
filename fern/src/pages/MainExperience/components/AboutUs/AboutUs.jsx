@@ -115,6 +115,7 @@ const AboutUs = () => {
               dragConstraints={{ left: 0, right: 0 }}
               dragElastic={0.2}
               onDragEnd={handleDragEnd} 
+              
             >
               <div 
                 className={styles.imagePlaceholder}

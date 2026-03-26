@@ -8,16 +8,15 @@ const MainExperience = () => {
   const displayName = useRequireName();
 
   const [displayedHeadline, setDisplayedHeadline] = useState('');
-  const [isTypingStarted, setIsTypingStarted] = useState(false);
   const [isTypingComplete, setIsTypingComplete] = useState(false);
   const [isBouncing, setIsBouncing] = useState(false);
 
   const fullHeadline = `Welcome ${displayName || ''} at Ferrn, we turn "meh" ideas into "whoa" brands.`;
 
-  // ⏱️ THE FIX: SNAPPY, ZERO-WAIT TIMINGS
-  const OVERLAY_FADE_DURATION = 1000; // Overlay fades in over 1 second smoothly
-  const HEADER_DROP_DELAY = 300;      // Logo drops almost instantly (0.3s)
-  const TYPING_START_DELAY = 1000;    // Typing starts right as the logo finishes dropping (1s)
+  // ⏱️ TIMINGS
+  const OVERLAY_FADE_DURATION = 1000; 
+  const HEADER_DROP_DELAY = 300;      
+  const TYPING_START_DELAY = 1000;    
   const TYPING_SPEED = 40;           
 
   // ==========================================
@@ -35,11 +34,9 @@ const MainExperience = () => {
   const logoY = useTransform(scrollY, [0, 300, 450, 700], [0, 250, 250, -500]); 
   // ==========================================
 
-  // Typing Effect Logic
+  // Typing Effect Logic (Cleaned up to reduce memory leaks)
   useEffect(() => {
     const initialDelay = setTimeout(() => {
-      setIsTypingStarted(true);
-      
       let currentIndex = 0;
       const typingInterval = setInterval(() => {
         if (currentIndex <= fullHeadline.length) {
@@ -86,7 +83,7 @@ const MainExperience = () => {
         }}
       >
         
-        {/* THE VIDEO */}
+        {/* THE VIDEO: Restored to full height/width without the extra heavy cropping logic */}
         <video 
           src={images.heroVideo} 
           poster={images.fernwebsite1} 
@@ -95,35 +92,41 @@ const MainExperience = () => {
           loop
           muted
           playsInline
-          preload="auto"
+          disablePictureInPicture
           style={{ 
-            objectFit: 'cover', 
-            width: '100%', 
-            height: '100%',
+            // objectFit: 'cover', 
+            // width: '100%', 
+            // height: '100%',
             position: 'absolute',
             top: 0,
-            left: 0
+            left: 0,
+            transform: 'translateZ(0)' // Hardware Acceleration
           }}
         />
 
-        {/* THE OVERLAY: Instantly starts fading to 0.4 opacity over 1 second */}
+        {/* THE OVERLAY: Using your exact requested gradient */}
         <motion.div 
           className={styles.videoOverlay}
           initial={{ opacity: 0 }}
-          animate={{ opacity: 0.4 }} 
+          animate={{ opacity: 1 }} 
           transition={{ 
             duration: OVERLAY_FADE_DURATION / 1000, 
             ease: "easeOut" 
           }}
-          style={{ position: 'absolute', inset: 0, zIndex: 20 }} 
-        ></motion.div>
+          style={{ 
+            position: 'absolute', 
+            inset: 0, 
+            zIndex: 20,
+            background: 'linear-gradient(180deg, rgba(0, 0, 0, 0.3182) 0%, rgba(0, 0, 0, 0.86) 70%)'
+          }} 
+        />
 
         {/* THE TYPING TEXT */}
         <div className={styles.contentLayer} style={{ zIndex: 30 }}>
           <div className={styles.centerContent} >
             <h1 className={styles.heroHeadline}>
               {displayedHeadline}
-              {isTypingStarted && !isTypingComplete && <span className={styles.cursor}>|</span>}
+              {!isTypingComplete && <span className={styles.cursor}>|</span>}
             </h1>
           </div>
         </div>

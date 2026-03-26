@@ -65,7 +65,7 @@ const AudioCard = ({ item, isCenter, isPlaying, positionOffset, onPlay, onAudioE
     >
       <div className={styles.imageContainer}>
         <img src={item.imageUrl} alt={item.name} className={styles.clientImage} />
-        <div className={styles.nameTag}>{item.name}, {item.role}</div>
+        <div className={styles.nameTag}>{item.name} <br /> {item.role}</div>
       </div>
 
       <div className={styles.playerContainer}>

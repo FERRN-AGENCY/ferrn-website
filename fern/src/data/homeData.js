@@ -69,7 +69,7 @@ export const testimonialsData = [
   {
     id: 5,
     name: "Nkem",
-    role: "Manager Lead for PWAN",
+    role: "Manager and Evaluation Lead for PWAN",
     imageUrl: "https://res.cloudinary.com/dyizdpyem/image/upload/v1774553630/Screenshot_2026-03-26_at_6.23.23_PM_u6e1lv.png",
     audioUrl: "https://res.cloudinary.com/dyizdpyem/video/upload/v1774553644/WhatsApp_Audio_2026-03-26_at_6.18.43_PM_pqa6ch.3gp",
     quote: "Fast, ruthless, and incredibly talented. They cut out all the agency fluff and just delivered pure, high-end results on time."
