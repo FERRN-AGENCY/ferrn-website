@@ -173,6 +173,7 @@
 }
 
 .startBtn:hover {
+  background-color: #771E00;
   transform: translateY(-2px);
 }
 
