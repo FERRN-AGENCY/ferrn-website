@@ -140,6 +140,8 @@
     padding: 10px;
   }
   .tagsBox{
+    flex-wrap: wrap;
+    justify-content: left;
     padding: 10px;
   }
   /* --- THE TWO NEW MOBILE TRICKS --- */

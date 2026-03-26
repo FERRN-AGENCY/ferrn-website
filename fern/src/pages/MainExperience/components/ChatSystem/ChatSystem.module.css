@@ -159,6 +159,7 @@ section {
 }
 
 .sendButton:hover {
+  background-color: #771E00;
   opacity: 0.8;
 }
 

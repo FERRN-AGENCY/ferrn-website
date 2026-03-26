@@ -93,6 +93,7 @@
 }
 
 .submitButton:hover {
+  background-color: #771E00;
   transform: scale(1.05);
 }
 

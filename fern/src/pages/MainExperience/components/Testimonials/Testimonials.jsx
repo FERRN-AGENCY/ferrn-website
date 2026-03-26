@@ -12,8 +12,6 @@ const formatTime = (timeInSeconds) => {
   return `${m}:${s < 10 ? '0' : ''}${s}`;
 };
 
-// A hand-crafted array of heights to simulate a realistic audio waveform
-// Double the numbers = half the thickness!
 const waveHeights = [
   20, 30, 45, 60, 80, 100, 85, 60, 45, 30, 
   25, 40, 60, 85, 100, 80, 55, 35, 45, 70, 
@@ -24,7 +22,6 @@ const waveHeights = [
 
 const AudioCard = ({ item, isCenter, isPlaying, positionOffset, onPlay, onAudioEnd, onDragEnd }) => {
   const audioRef = useRef(null);
-  
   const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [isTranscribing, setIsTranscribing] = useState(false);
@@ -59,9 +56,7 @@ const AudioCard = ({ item, isCenter, isPlaying, positionOffset, onPlay, onAudioE
       setTranscript(null); 
       return;
     }
-
     setIsTranscribing(true);
-
     try {
       await new Promise(resolve => setTimeout(resolve, 1000));
       setTranscript(item.quote); 
@@ -100,19 +95,17 @@ const AudioCard = ({ item, isCenter, isPlaying, positionOffset, onPlay, onAudioE
       <div className={styles.playerContainer}>
         <button className={styles.playBtn} onClick={(e) => { e.stopPropagation(); onPlay(); }}>
           {isPlaying ? (
-            // Added rx="1" to slightly round the pause bars
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--brand-orange, #F94406)">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="#F94406">
               <rect x="6" y="5" width="4" height="14" rx="1"/>
               <rect x="14" y="5" width="4" height="14" rx="1"/>
             </svg>
           ) : (
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--brand-orange, #F94406)">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="#F94406">
               <polygon points="6 4 19 12 6 20 6 4"/>
             </svg>
           )}
         </button>
 
-        {/* Live Filling Waveform using the realistic array */}
         <div className={styles.waveform}>
           {waveHeights.map((height, i) => {
             const isActiveBar = (i / waveHeights.length) <= progress;
@@ -126,7 +119,6 @@ const AudioCard = ({ item, isCenter, isPlaying, positionOffset, onPlay, onAudioE
           })}
         </div>
 
-        {/* The Timer */}
         <div className={styles.timer}>
           {formatTime(currentTime)}
         </div>
@@ -162,7 +154,6 @@ const AudioCard = ({ item, isCenter, isPlaying, positionOffset, onPlay, onAudioE
           )}
         </AnimatePresence>
       </div>
-
     </motion.div>
   );
 };
@@ -171,6 +162,20 @@ const Testimonials = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [playingId, setPlayingId] = useState(null);
   const totalItems = testimonialsData.length;
+
+  // --- THE AUTO-SCROLL FIX ---
+  useEffect(() => {
+    const isMobile = window.innerWidth <= 768;
+    
+    // Only auto-scroll on mobile and if NO audio is currently playing
+    if (isMobile && playingId === null) {
+      const interval = setInterval(() => {
+        handleNext();
+      }, 4000); // 4 seconds per slide
+
+      return () => clearInterval(interval);
+    }
+  }, [activeIndex, playingId]); // Reset timer whenever we move or play audio
 
   const handleNext = () => {
     setActiveIndex((prev) => (prev + 1) % totalItems);

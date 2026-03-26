@@ -150,6 +150,10 @@
 
 /* --- MOBILE RESPONSIVENESS --- */
 @media (max-width: 768px) {
+  .clientsContainer{
+    height: fit-content;
+    padding: 0px 0px 60px;
+  }
   .clientCard {
     width: 180px; 
     height: 140px; 
