@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion'; 
+import { motion, useScroll, useTransform, animate, useMotionValue } from 'framer-motion'; 
 import styles from './MainExperience.module.css';
 import images from '../../images'; 
 import { useRequireName } from '../../hooks/useRequireName';
@@ -8,10 +8,10 @@ const MainExperience = () => {
   const displayName = useRequireName();
   
   const videoRef = useRef(null);
-  // THE FIX: This flag makes sure we only reset the video ONCE
   const isVideoInitialized = useRef(false); 
 
-  const [displayedHeadline, setDisplayedHeadline] = useState('');
+  // 🚦 THE CHOREOGRAPHY STATES
+  const [headerLanded, setHeaderLanded] = useState(false);
   const [isTypingComplete, setIsTypingComplete] = useState(false);
   const [isBouncing, setIsBouncing] = useState(false);
 
@@ -19,9 +19,35 @@ const MainExperience = () => {
 
   // ⏱️ TIMINGS
   const OVERLAY_FADE_DURATION = 1000; 
-  const HEADER_DROP_DELAY = 300;      
-  const TYPING_START_DELAY = 1000;    
-  const TYPING_SPEED = 40;           
+  // THE FIX: 1 full second of breathing room so the browser can boot properly
+  const HEADER_DROP_DELAY = 1000;       
+  const TYPING_SPEED = 80;          
+
+  // ==========================================
+  // 🚀 THE EVENT-DRIVEN TYPING ENGINE
+  // ==========================================
+  const count = useMotionValue(0);
+  const roundedCount = useTransform(count, (latest) => Math.round(latest));
+  const displayText = useTransform(roundedCount, (latest) => fullHeadline.slice(0, latest));
+
+  useEffect(() => {
+    if (!headerLanded) return;
+
+    console.log("⌨️ [TYPING] Engine Started safely after the drop!");
+    
+    const controls = animate(count, fullHeadline.length, {
+      type: "tween",
+      duration: (fullHeadline.length * TYPING_SPEED) / 1000,
+      ease: "linear",
+      onComplete: () => {
+        console.log("✅ [TYPING] Completely Finished");
+        setIsTypingComplete(true);
+      }
+    });
+
+    return controls.stop;
+  }, [fullHeadline, count, headerLanded]); 
+  // ==========================================
 
   // ==========================================
   // 🎢 THE SCROLL MAGIC 
@@ -38,47 +64,29 @@ const MainExperience = () => {
   const logoY = useTransform(scrollY, [0, 300, 450, 700], [0, 250, 250, -500]); 
   // ==========================================
 
-  // THE FIX: Forces the video to start at 0:00, but ONLY the very first time it loads
+  // Handle Video Reset
   const handleVideoReady = () => {
     if (videoRef.current && !isVideoInitialized.current) {
-      isVideoInitialized.current = true; // Locks the function so it never fires again
+      isVideoInitialized.current = true; 
       videoRef.current.currentTime = 0; 
-      videoRef.current.play().catch(e => console.log("Browser autoplay pause:", e));
+      videoRef.current.play().catch(e => console.error("❌ [VIDEO ERROR] Autoplay blocked:", e));
     }
   };
 
-  // Typing Effect Logic
-  useEffect(() => {
-    const initialDelay = setTimeout(() => {
-      let currentIndex = 0;
-      const typingInterval = setInterval(() => {
-        if (currentIndex <= fullHeadline.length) {
-          setDisplayedHeadline(fullHeadline.slice(0, currentIndex));
-          currentIndex++;
-        } else {
-          clearInterval(typingInterval); 
-          setIsTypingComplete(true); 
-        }
-      }, TYPING_SPEED); 
-
-      return () => clearInterval(typingInterval);
-    }, TYPING_START_DELAY); 
-
-    return () => clearTimeout(initialDelay);
-  }, [fullHeadline]);
-
   // "Scroll Down" Bounce Logic
   useEffect(() => {
-    const totalEntranceTime = TYPING_START_DELAY + (fullHeadline.length * TYPING_SPEED);
+    if (!isTypingComplete) return; 
+
     const startBouncing = setTimeout(() => {
       const bounceInterval = setInterval(() => {
         setIsBouncing(true);
         setTimeout(() => setIsBouncing(false), 500); 
       }, 5000);
       return () => clearInterval(bounceInterval);
-    }, totalEntranceTime);
+    }, 1000); 
+    
     return () => clearTimeout(startBouncing);
-  }, [fullHeadline.length]);
+  }, [isTypingComplete]);
 
   if (!displayName) return null;
 
@@ -137,8 +145,18 @@ const MainExperience = () => {
         <div className={styles.contentLayer} style={{ zIndex: 30 }}>
           <div className={styles.centerContent} >
             <h1 className={styles.heroHeadline}>
-              {displayedHeadline}
-              {!isTypingComplete && <span className={styles.cursor}>|</span>}
+              <motion.span>{displayText}</motion.span>
+              
+              {headerLanded && !isTypingComplete && (
+                <motion.span 
+                  className={styles.cursor}
+                  animate={{ opacity: [1, 0] }}
+                  transition={{ repeat: Infinity, duration: 0.8, ease: "steps(2)" }}
+                  style={{ display: "inline-block", marginLeft: "2px" }}
+                >
+                  |
+                </motion.span>
+              )}
             </h1>
           </div>
         </div>
@@ -148,7 +166,16 @@ const MainExperience = () => {
         className={styles.header}
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}          
-        transition={{ delay: HEADER_DROP_DELAY / 1000, duration: 0.8, ease: "easeOut" }} 
+        transition={{ 
+          delay: HEADER_DROP_DELAY / 1000, 
+          duration: 1.4, 
+          ease: [0.22, 1, 0.36, 1] 
+        }} 
+        onAnimationStart={() => console.log("🚀 [HEADER] Graceful Drop Started")}
+        onAnimationComplete={() => {
+          console.log("🏁 [HEADER] Drop Animation Completed Perfectly");
+          setHeaderLanded(true); 
+        }}
         style={{ 
           position: 'relative', 
           zIndex: 40,
