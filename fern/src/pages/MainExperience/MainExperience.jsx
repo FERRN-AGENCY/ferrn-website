@@ -41,16 +41,9 @@ const MainExperience = () => {
   const logoY = useTransform(scrollY, [0, 300, 450, 700], [0, 250, 250, -500]); 
   // ==========================================
 
-  // --- NEW: Image Sequence Preloader & Player ---
   useEffect(() => {
-    // 1. Preload all 20 images
-    for (let i = 1; i <= TOTAL_FRAMES; i++) {
-      const img = new Image();
-      // THE FIX: Ensured the preloader uses the exact same Capitalization
-      img.src = images[`FernWebsite${i}`]; 
-    }
-
-    // 2. The Playback Engine (Now controlled by FRAME_SPEED)
+    // We no longer need the clunky 'new Image()' preloader 
+    // because rendering all 20 DOM nodes below automatically preloads them!
     const frameInterval = setInterval(() => {
       setCurrentFrame((prevFrame) => (prevFrame === TOTAL_FRAMES ? 1 : prevFrame + 1));
     }, FRAME_SPEED);
@@ -93,6 +86,9 @@ const MainExperience = () => {
 
   if (!displayName) return null;
 
+  // We create a quick array of numbers [1, 2, 3... 20] to map over
+  const framesArray = Array.from({ length: TOTAL_FRAMES }, (_, i) => i + 1);
+
   return (
     <div className={styles.heroContainer} style={{ position: 'sticky', top: 0, zIndex: 0, backgroundColor: 'var(--bg-primary)' }}>
       
@@ -103,27 +99,42 @@ const MainExperience = () => {
           width: '100%', 
           height: '100%', 
           position: 'absolute',
-          willChange: "transform, opacity" /* THE FIX: Offloads the heavy scroll scaling to the GPU */
+          willChange: "transform, opacity" 
         }}
       >
         
-        {/* THE FIX: Matched casing to preloader and added fetchPriority for instant loading */}
-        <img 
-          src={images[`fernwebsite${currentFrame}`]} 
-          alt="Hero Background Animation" 
-          className={styles.bgVideo} 
-          fetchPriority="high"
-          style={{ objectFit: 'cover', width: '100%', height: '100%' }}
-        />
+        {/* THE FIX: "The Stacked Deck" */}
+        {/* All 20 images exist in the DOM simultaneously. We just fade them in and out. */}
+        {framesArray.map((frameNumber) => (
+          <img 
+            key={frameNumber}
+            src={images[`fernwebsite${frameNumber}`]} 
+            alt="Hero Background Animation" 
+            className={styles.bgVideo} 
+            fetchPriority={frameNumber <= 3 ? "high" : "auto"} /* Prioritizes the first 3 frames */
+            style={{ 
+              objectFit: 'cover', 
+              width: '100%', 
+              height: '100%',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              opacity: currentFrame === frameNumber ? 1 : 0, /* Only show the active frame */
+              transition: 'opacity 0.15s ease-in-out', /* Buttery smooth crossfade between frames */
+              willChange: 'opacity' /* Tells the GPU to handle the crossfading */
+            }}
+          />
+        ))}
 
         <motion.div 
           className={styles.videoOverlay}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: VIDEO_PLAY_TIME / 1000, duration: OVERLAY_FADE_DURATION / 1000, ease: "easeInOut" }}
+          style={{ position: 'absolute', inset: 0, zIndex: 20 }} /* Make sure overlay sits above the images */
         ></motion.div>
 
-        <div className={styles.contentLayer}>
+        <div className={styles.contentLayer} style={{ zIndex: 30 }}>
           <div className={styles.centerContent} >
             <h1 className={styles.heroHeadline}>
               {displayedHeadline}
@@ -140,7 +151,7 @@ const MainExperience = () => {
         transition={{ delay: HEADER_DROP_DELAY / 1000, duration: 0.8, ease: "easeOut" }} 
         style={{ 
           position: 'relative', 
-          zIndex: 10,
+          zIndex: 40,
         }}
       >
         <motion.img 
@@ -150,7 +161,7 @@ const MainExperience = () => {
           style={{ 
             scale: logoScale, 
             y: logoY,
-            willChange: "transform" /* GPU Hack for the logo */
+            willChange: "transform" 
           }}
         />
         
@@ -161,7 +172,7 @@ const MainExperience = () => {
           style={{ 
             opacity: navOpacity, 
             scale: navScale,
-            willChange: "transform, opacity" /* GPU Hack for the nav text */
+            willChange: "transform, opacity" 
           }}
         >
           {displayName} scroooool downnnnn

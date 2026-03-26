@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext, useRef } from 'react';
-import { motion, AnimatePresence, useTransform, useMotionValue, useMotionValueEvent } from 'framer-motion';
+import { motion, useTransform, useMotionValue, useMotionValueEvent } from 'framer-motion';
 import { UserContext } from '../../../../context/UserContext';
 import images from '../../../../images'; 
 import { SectionTitle, ActionButtons } from '../../../../components/common/SectionHeaders';
@@ -11,10 +11,10 @@ const OurServices = ({ scrollProgress }) => {
   const displayName = userName ? userName : "friend";
   
   const [activeIndex, setActiveIndex] = useState(0);
-  const activeService = servicesData[activeIndex] || servicesData[0];
   const [isMobile, setIsMobile] = useState(false);
   
-  const videoRef = useRef(null);
+  // THE FIX: Changed to an array of refs so we can control ALL videos at once
+  const videoRefs = useRef([]);
 
   const fallbackScroll = useMotionValue(0);
   const sp = scrollProgress || fallbackScroll;
@@ -50,21 +50,26 @@ const OurServices = ({ scrollProgress }) => {
   const videoXDesktop = useTransform(sp, [0.30, 0.45], ["0%", "-40%"]);
   const videoX = isMobile ? "0%" : videoXDesktop;
 
+  // THE FIX: The Performance Manager
+  // Plays the active video, and pauses the hidden ones to save battery/memory!
   useEffect(() => {
-    if (videoRef.current) {
-      // THE FIX: Explicitly enforce the muted rules so the browser allows autoplay
-      videoRef.current.defaultMuted = true;
-      videoRef.current.muted = true;
-      videoRef.current.currentTime = 0;
-      
-      const playPromise = videoRef.current.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          // Silently catch autoplay rejections to prevent console red errors
-        });
+    videoRefs.current.forEach((vid, index) => {
+      if (vid) {
+        vid.defaultMuted = true;
+        vid.muted = true;
+        
+        if (index === activeIndex) {
+          vid.currentTime = 0;
+          const playPromise = vid.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(() => {});
+          }
+        } else {
+          vid.pause(); // Pause hidden videos
+        }
       }
-    }
-  }, [activeService]);
+    });
+  }, [activeIndex]);
 
   const handleServiceClick = (index) => {
     setActiveIndex(index);
@@ -101,34 +106,50 @@ const OurServices = ({ scrollProgress }) => {
             style={{ 
               x: videoX, 
               cursor: "pointer", 
-              WebkitTapHighlightColor: "transparent" 
+              WebkitTapHighlightColor: "transparent",
+              willChange: "transform" /* GPU Acceleration for the sliding motion */
             }}
             onClick={() => handleServiceClick((activeIndex + 1) % servicesData.length)}
           >
-            <AnimatePresence mode="wait">
-              <motion.div 
-                key={activeService?.id || 'empty'} 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.4 }} 
-                className={styles.imageCard}
-              >
-                {activeService?.video && images[activeService.video] && (
-                  /* THE FIX: Added preload="auto" to force immediate loading */
-                  <video 
-                    ref={videoRef} 
-                    src={images[activeService.video]} 
-                    className={styles.serviceVideoElement} 
-                    autoPlay 
-                    loop 
-                    muted 
-                    playsInline 
-                    preload="auto" 
-                  />
-                )}
-              </motion.div>
-            </AnimatePresence>
+            {/* THE FIX: The Stacked Deck for Videos */}
+            <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+              {servicesData.map((service, index) => {
+                const isActive = activeIndex === index;
+                
+                return (
+                  <motion.div 
+                    key={service?.id || index} 
+                    initial={false}
+                    animate={{ opacity: isActive ? 1 : 0 }}
+                    transition={{ duration: 0.4, ease: "easeInOut" }} 
+                    className={styles.imageCard}
+                    style={{ 
+                      // The first card sets the height, the rest stack absolutely on top
+                      position: index === 0 ? 'relative' : 'absolute', 
+                      top: 0, 
+                      left: 0, 
+                      width: '100%', 
+                      height: '100%',
+                      willChange: "opacity", /* GPU Acceleration for the crossfade */
+                      pointerEvents: isActive ? 'auto' : 'none' /* Prevents clicking hidden cards */
+                    }}
+                  >
+                    {service?.video && images[service.video] && (
+                      <video 
+                        ref={(el) => (videoRefs.current[index] = el)} 
+                        src={images[service.video]} 
+                        className={styles.serviceVideoElement} 
+                        autoPlay={isActive} 
+                        loop 
+                        muted 
+                        playsInline 
+                        preload="auto" 
+                      />
+                    )}
+                  </motion.div>
+                );
+              })}
+            </div>
           </motion.div>
         </div>
 
