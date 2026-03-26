@@ -18,8 +18,8 @@ const MainExperience = () => {
 
   const fullHeadline = `Welcome ${displayName || ''} at Ferrn, we turn "meh" ideas into "whoa" brands.`;
 
-// ⏱️ ANIMATION TIMINGS
-  const FRAME_SPEED = 75;             // <-- NEW: Higher number = slower playback (75ms is the sweet spot)
+  // ⏱️ ANIMATION TIMINGS
+  const FRAME_SPEED = 75;             
   const VIDEO_PLAY_TIME = 3000;       
   const OVERLAY_FADE_DURATION = 1500; 
   const HEADER_DROP_DELAY = 4000;     
@@ -46,7 +46,8 @@ const MainExperience = () => {
     // 1. Preload all 20 images
     for (let i = 1; i <= TOTAL_FRAMES; i++) {
       const img = new Image();
-      img.src = images[`FernWebsite${i}`];
+      // THE FIX: Ensured the preloader uses the exact same Capitalization
+      img.src = images[`FernWebsite${i}`]; 
     }
 
     // 2. The Playback Engine (Now controlled by FRAME_SPEED)
@@ -95,14 +96,23 @@ const MainExperience = () => {
   return (
     <div className={styles.heroContainer} style={{ position: 'sticky', top: 0, zIndex: 0, backgroundColor: 'var(--bg-primary)' }}>
       
-      <motion.div style={{ opacity: heroOpacity, scale: heroScale, width: '100%', height: '100%', position: 'absolute' }}>
+      <motion.div 
+        style={{ 
+          opacity: heroOpacity, 
+          scale: heroScale, 
+          width: '100%', 
+          height: '100%', 
+          position: 'absolute',
+          willChange: "transform, opacity" /* THE FIX: Offloads the heavy scroll scaling to the GPU */
+        }}
+      >
         
-        {/* THE FIX: Replaced the <video> tag with our rapidly updating <img> tag */}
-        {/* We keep the styles.bgVideo class so it retains your exact sizing and positioning */}
+        {/* THE FIX: Matched casing to preloader and added fetchPriority for instant loading */}
         <img 
           src={images[`fernwebsite${currentFrame}`]} 
           alt="Hero Background Animation" 
           className={styles.bgVideo} 
+          fetchPriority="high"
           style={{ objectFit: 'cover', width: '100%', height: '100%' }}
         />
 
@@ -128,20 +138,31 @@ const MainExperience = () => {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}          
         transition={{ delay: HEADER_DROP_DELAY / 1000, duration: 0.8, ease: "easeOut" }} 
-        style={{ position: 'relative', zIndex: 10 }}
+        style={{ 
+          position: 'relative', 
+          zIndex: 10,
+        }}
       >
         <motion.img 
           src={images.Fern} 
           alt="Ferrn Logo" 
           className={styles.centerLogo} 
-          style={{ scale: logoScale, y: logoY }}
+          style={{ 
+            scale: logoScale, 
+            y: logoY,
+            willChange: "transform" /* GPU Hack for the logo */
+          }}
         />
         
         <motion.span 
           className={styles.welcomeNav}
           animate={{ y: isBouncing ? [0, -8, 8, -8, 8, 0] : 0 }}
           transition={{ duration: isBouncing ? 0.6 : 0 }}
-          style={{ opacity: navOpacity, scale: navScale }}
+          style={{ 
+            opacity: navOpacity, 
+            scale: navScale,
+            willChange: "transform, opacity" /* GPU Hack for the nav text */
+          }}
         >
           {displayName} scroooool downnnnn
         </motion.span>

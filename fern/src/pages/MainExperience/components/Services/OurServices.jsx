@@ -47,14 +47,22 @@ const OurServices = ({ scrollProgress }) => {
   const textOpacity = useTransform(sp, [0.30, 0.38], [1, 0]);
 
   // 3. THE VIDEO SLIDE: Moves the video left to the center of the screen
-  // -50% shifts it left by half of its own width. 
   const videoXDesktop = useTransform(sp, [0.30, 0.45], ["0%", "-40%"]);
   const videoX = isMobile ? "0%" : videoXDesktop;
 
   useEffect(() => {
     if (videoRef.current) {
+      // THE FIX: Explicitly enforce the muted rules so the browser allows autoplay
+      videoRef.current.defaultMuted = true;
+      videoRef.current.muted = true;
       videoRef.current.currentTime = 0;
-      videoRef.current.play().catch(() => {});
+      
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // Silently catch autoplay rejections to prevent console red errors
+        });
+      }
     }
   }, [activeService]);
 
@@ -91,7 +99,7 @@ const OurServices = ({ scrollProgress }) => {
           <motion.div 
             className={styles.imageColumn} 
             style={{ 
-              x: videoX, /* THE FIX: The video now slides left based on scroll */
+              x: videoX, 
               cursor: "pointer", 
               WebkitTapHighlightColor: "transparent" 
             }}
@@ -107,7 +115,17 @@ const OurServices = ({ scrollProgress }) => {
                 className={styles.imageCard}
               >
                 {activeService?.video && images[activeService.video] && (
-                  <video ref={videoRef} src={images[activeService.video]} className={styles.serviceVideoElement} autoPlay loop muted playsInline />
+                  /* THE FIX: Added preload="auto" to force immediate loading */
+                  <video 
+                    ref={videoRef} 
+                    src={images[activeService.video]} 
+                    className={styles.serviceVideoElement} 
+                    autoPlay 
+                    loop 
+                    muted 
+                    playsInline 
+                    preload="auto" 
+                  />
                 )}
               </motion.div>
             </AnimatePresence>
