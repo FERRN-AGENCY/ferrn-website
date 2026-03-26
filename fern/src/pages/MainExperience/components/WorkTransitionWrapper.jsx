@@ -37,19 +37,11 @@ const WorkTransitionWrapper = () => {
     ["var(--bg-primary)", "#F94406", "#F94406", "var(--bg-primary)"]
   );
 
-  // 3. THE FIX: Process Grid stays hidden (opacity 0) until the zoom finishes at 0.85!
-  const processGridOpacityDesktop = useTransform(scrollYProgress, [0.85, 0.95], [0, 1]);
-  const processGridYDesktop = useTransform(scrollYProgress, [0.85, 0.95], ["100px", "0px"]); // Adds a slick slide-up effect
-
   // --- DYNAMIC APPLICATION ---
   const caseStudiesY = isMobile ? yMobile : yDesktop;
   const caseStudiesScale = isMobile ? 1 : scaleDesktop;
   const caseStudiesOpacity = isMobile ? 1 : opacityDesktop;
   const wrapperBg = isMobile ? "var(--bg-primary)" : bgFadeDesktop;
-
-  // Mobile keeps Process Grid visible underneath so the curtain can just slide over it
-  const processGridOpacity = isMobile ? 1 : processGridOpacityDesktop;
-  const processGridY = isMobile ? "0px" : processGridYDesktop;
 
   const servicesOpacity = useTransform(scrollYProgress, [0.35, 0.45], [1, 0]);
   const servicesPointerEvents = useTransform(scrollYProgress, [0, 0.40], ["auto", "none"]);
@@ -58,6 +50,12 @@ const WorkTransitionWrapper = () => {
     [0, 0.35, 0.45, 0.75, 0.85, 1], 
     ["none", "none", "auto", "auto", "none", "none"]
   );
+
+  // 3. THE FIX: "The Grid Elevator"
+  // At 0.84, the grid is at zIndex 1 (behind the invisible 400vh box). 
+  // At 0.85, it snaps to zIndex 20, bringing it to the front so it can be clicked!
+  const gridZIndexDesktop = useTransform(scrollYProgress, [0.84, 0.85], [1, 20]);
+  const gridPointerEventsDesktop = useTransform(scrollYProgress, [0.84, 0.85], ["none", "auto"]);
 
   return (
     <motion.div style={{ position: "relative", width: "100%", backgroundColor: wrapperBg }}>
@@ -104,15 +102,14 @@ const WorkTransitionWrapper = () => {
       </div>
 
       {/* LAYER 3: Process Grid */}
-      {/* Wrapped in a motion.div to control exactly when it appears */}
+      {/* Re-added the motion wrapper so it can ride the Z-Index Elevator to the top! */}
       <motion.div 
         id="case-studies" 
         style={{ 
           position: "relative", 
-          zIndex: 1, 
-          marginTop: "-100vh",
-          opacity: processGridOpacity,
-          y: processGridY
+          zIndex: isMobile ? 20 : gridZIndexDesktop, /* Elevates the grid */
+          pointerEvents: isMobile ? "auto" : gridPointerEventsDesktop, /* Unlocks clicks */
+          marginTop: "-100vh"
         }}
       >
         <ProcessGrid />

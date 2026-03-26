@@ -28,32 +28,25 @@
   gap: 10px;
   width: 90%;
   display: flex;
-  /* justify-content: space-between; */
 }
 
 .filterButton {
-  /* THE FIX: Replaced hardcoded #111 with your dynamic --not-active variable */
   background: var(--not-active);
   border: none;
   padding: 10px 36px;
   font-size: 1.2rem;
-  /* THE FIX: Replaced #888 with your dynamic --font-text variable */
   color: var(--text-muted);
   cursor: pointer;
   transition: all 0.3s ease;
- /* Slight rounding looks better on these tabs */
 }
 
 .filterButton:hover {
-  /* THE FIX: Text adapts to black in light mode, white in dark mode */
   color: var(--text-primary); 
 }
 
 .activeFilter {
-  /* THE FIX: Active button uses the main background and primary text color */
   background: var(--bg-box);
   color: var(--text-primary);
-  /* Added a very subtle shadow so the active tab "pops" off the background in light mode */
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05);
 }
 
@@ -85,7 +78,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Keeps the dark overlay over images in both modes for text legibility */
   background: rgba(0,0,0,0.4); 
   opacity: 0;
   transition: 0.3s ease;
@@ -100,30 +92,9 @@
   transform: scale(1.05);
 }
 
-/* TAG */
-.tag {
-  background: var(--brand-orange);
-  color: #fff;
-  padding: 8px 18px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  transform: rotate(-10deg);
-}
-
-/* FOOTER */
-.footer {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
 /* DYNAMIC CENTER TILE STYLE */
 .categoryCard {
-  background: radial-gradient(
-    ellipse at center, 
-    #FF4500 55%, 
-    #FDB497 100%
-  );
+  background: radial-gradient(ellipse at center, #FF4500 55%, #FDB497 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -138,6 +109,24 @@
   padding: 10px;
   line-height: 1.2;
 }
+
+/* PLACEHOLDER CARD */
+.placeholder {
+  background: var(--not-active);
+  border: 1px dashed var(--bg-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.placeholderContent {
+  color: var(--gray-dark-mode);
+  font-size: 1.2rem;
+  letter-spacing: 0.05em;
+  width: 59%;
+  text-align: center;
+}
+
 /* =========================================
    INTERACTIVE FLOATING CURSOR
    ========================================= */
@@ -145,28 +134,45 @@
   position: fixed;
   top: 0;
   left: 0;
-  /* THE FIX: Removed fixed width/height and made it rectangular */
   width: auto;
   height: auto;
   padding: 10px 20px; 
-  background-color: #F94406; /* Brand Orange */
+  background-color: #F94406; 
   color: #FFFFFF;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 14px;
   font-weight: 600;
-  pointer-events: none; /* Lets clicks pass through */
+  pointer-events: none; 
   z-index: 9999;
   box-shadow: 0 10px 20px rgba(249, 68, 6, 0.4);
-  white-space: nowrap; /* Prevents text from breaking into two lines */
+  white-space: nowrap; 
 }
 
-/* Hide the standard overlay text on Desktop so it doesn't clash with the custom cursor */
+/* =========================================
+   DESKTOP / MOUSE-ONLY HOVERS
+   ========================================= */
 @media (hover: hover) and (pointer: fine) {
   .mobileTag {
     display: none;
   }
+}
+
+/* =========================================
+   TABLET RESPONSIVENESS
+   ========================================= */
+@media (max-width: 900px) {
+  .filterBlocks {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    width: fit-content;
+  }
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
 
 /* =========================================
    MOBILE RESPONSIVENESS
@@ -176,17 +182,19 @@
     width: 90%;
     margin: auto;
   }
-  /* Aggressively hide the custom cursor on mobile just in case */
+  
   .customCursor {
     display: none !important;
   }
 
-  /* Hides the "Add Project" placeholders completely on small screens */
   .placeholder {
     display: none !important;
   }
   
-  /* The normal overlay tag shows up on mobile where the custom cursor is disabled */
+  .categoryCard {
+    display: none;
+  }
+
   .mobileTag {
     display: block;
     background-color: #F94406;
@@ -196,57 +204,7 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    /* transform: skewX(-15deg); */
     box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.3);
-  }
-
-  .mobileTag span {
-    display: block;
-    /* transform: skewX(15deg); */
-  }
-  
-}
-  
- 
-  
-}
-/* PLACEHOLDER CARD */
-.placeholder {
-  /* THE FIX: Adapts to your light/dark mode variables instead of forced white transparency */
-  background: var(--not-active);
-  border: 1px dashed var(--bg-text);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* TEXT INSIDE EMPTY BOX */
-.placeholderContent {
-  /* THE FIX: Adapts to gray text in both modes */
-  color: var(--gray-dark-mode);
-  font-size: 1.2rem;
-  letter-spacing: 0.05em;
-  width: 59%;
-  text-align: center;
-  /* text-transform: uppercase; */
-}
-
-.placeholderContent span {
-
-
-}
-
-/* RESPONSIVE */
-@media (max-width: 900px) {
-  .filterBlocks {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    width: fit-content;
-    justify-content: normal;
-  }
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -255,16 +213,10 @@
     grid-template-columns: 1fr;
   }
 
-  .filterBlocks {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    width: fit-content;
-    justify-content: normal;
-  }
   .filterButton{
     font-size: 0.8rem;
   }
+  
   .overlay {
     opacity: 1;
   }
@@ -272,54 +224,4 @@
   .image {
     filter: brightness(0.8);
   }
-}
-
-/* =========================================
-   DESKTOP / MOUSE-ONLY HOVERS
-   ========================================= */
-/* This media query ensures that "hover" CSS only applies to devices with a real mouse pointer, fixing the sticky mobile tap issue! */
-@media (hover: hover) and (pointer: fine) {
-  .mobileTag {
-    display: none;
-  }
-  
-  /* If you have any .card:hover effects, put them inside this block too! */
-}
-
-/* =========================================
-   MOBILE RESPONSIVENESS
-   ========================================= */
-@media (max-width: 768px) {
-  
-  /* Aggressively hide the custom cursor on mobile just in case */
-  .customCursor {
-    display: none !important;
-  }
-
-  /* Hides the "Add Project" placeholders completely on small screens */
-  .placeholder {
-    display: none !important;
-  }
-  .categoryCard{
-    display: none;
-  }
-  /* The normal overlay tag shows up on mobile where the custom cursor is disabled */
-  .mobileTag {
-    display: block;
-    background-color: #F94406;
-    color: white;
-    padding: 8px 16px;
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    /* transform: skewX(-15deg); */
-    box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.3);
-  }
-
-  .mobileTag span {
-    display: block;
-    /* transform: skewX(15deg); */
-  }
-  
 }

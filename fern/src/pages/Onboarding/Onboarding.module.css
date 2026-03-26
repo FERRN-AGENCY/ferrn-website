@@ -78,6 +78,7 @@
 }
 
 .submitButton {
+  display: flex;
   background-color: var(--brand-orange);
   color: #FFFFFF;
   border: none;
@@ -88,6 +89,7 @@
   font-size: 1.2rem;
   cursor: pointer;
   transition: transform 0.2s ease;
+  justify-content: center;
 }
 
 .submitButton:hover {

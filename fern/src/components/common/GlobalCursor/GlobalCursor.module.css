@@ -2,29 +2,25 @@
   position: fixed;
   top: 0;
   left: 0;
-  pointer-events: none; /* CRITICAL: Stops the cursor from blocking your actual clicks! */
-  z-index: 99999; /* Keeps it above everything, including your navbars */
-  display: flex;
-  align-items: center;
-  gap: 8px; /* Space between the orange shape and the name tag */
+  pointer-events: none !important;
+  z-index: 999999;
 }
 
-.cursorShape {
-  width: 24px;
-  height: 24px;
-  /* Rotates the L-shape to perfectly match the angle in your screenshot */
-  transform: rotate(15deg); 
-  filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.3));
+.cursorContainer {
+  display: flex;
+  flex-direction: column; /* Stacks name under the arrow */
+  align-items: flex-start;
 }
 
 .cursorName {
-  background-color: transparent; /* Dark background */
-  color: #fff;
-  font-size: 0.75rem;
-  font-weight: 600;
-  padding: 6px 14px;
-  /* border-radius: 20px; */
-  /* border: 1px solid #F94406;  */
+  color: #FFFFFF;
+  font-size: 0.7rem;
+  font-weight: 500;
+  /* Adjust these two values to "tuck" the name exactly where you want it */
+  transform: translate(20px, -10px); 
+  
+  text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.8);
   white-space: nowrap;
-  /* box-shadow: 0 4px 10px rgba(0,0,0,0.2); */
+  letter-spacing: 0.03em;
+  font-family: inherit; /* Ensures it matches your site's clean font */
 }

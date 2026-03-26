@@ -36,26 +36,35 @@ export const processGridData = [
 export const testimonialsData = [
   {
     id: 1,
-    name: "Alex",
-    role: "Startup Founder",
+    name: "Vanessa",
+    role: "CEO Bagzilla",
     imageUrl: "https://res.cloudinary.com/dyizdpyem/image/upload/v1774525428/WhatsApp_Image_2026-03-26_at_11.38.36_y99rhu.jpg",
     audioUrl: "https://res.cloudinary.com/dyizdpyem/video/upload/v1774525428/WhatsApp_Audio_2026-03-26_at_11.34.46_cmbcpi.ogg",
     quote: "Working with Ferrn completely shifted our trajectory. They didn't just design a website, they built a machine that actually converts our audience."
   },
   {
     id: 2,
-    name: "Sarah",
-    role: "Creative Director",
+    name: "Chisom Okereke",
+    role: "Ceo Hush D",
     imageUrl: "https://res.cloudinary.com/dyizdpyem/image/upload/v1774525428/Screenshot_2026-03-25_at_10.17.36_PM_u3t6hu.png",
-    audioUrl: "https://res.cloudinary.com/dyizdpyem/video/upload/v1774525427/John_Sax_djjmeq.ogg",
+    audioUrl: "https://res.cloudinary.com/dyizdpyem/video/upload/v1774525446/Chisom_Okereke_qfoc78.ogg  ",
     quote: "The attention to detail is insane. We handed them a broken brand, and they handed us back a masterpiece. I cannot recommend them enough."
   },
   {
     id: 3,
-    name: "David",
-    role: "E-com Owner",
+    name: "John Sax",
+    role: "CEO Jstar Films",
     imageUrl: "https://res.cloudinary.com/dyizdpyem/image/upload/v1774525428/me_gm1itv.jpg",
-    audioUrl: "https://res.cloudinary.com/dyizdpyem/video/upload/v1774525446/Chisom_Okereke_qfoc78.ogg",
+    audioUrl: "https://res.cloudinary.com/dyizdpyem/video/upload/v1774525427/John_Sax_djjmeq.ogg",
+    quote: "Fast, ruthless, and incredibly talented. They cut out all the agency fluff and just delivered pure, high-end results on time."
+  },
+   {
+    id: 4,
+    name: "Ifechukwu",
+    role: "Brand Director Outbox-Experience",
+    imageUrl: "https://res.cloudinary.com/dyizdpyem/image/upload/v1774535349/WhatsApp_Image_2025-09-06_at_10.17.44_dzj8xi.jpg",
+    audioUrl: "https://res.cloudinary.com/dyizdpyem/video/upload/v1774535400/WhatsApp_Audio_2026-03-26_at_13.22.53_ovnohj.ogg",
     quote: "Fast, ruthless, and incredibly talented. They cut out all the agency fluff and just delivered pure, high-end results on time."
   }
+  
 ];

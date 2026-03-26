@@ -8,6 +8,7 @@ import ProcessGrid from './MainExperience/components/ProcessGrid/ProcessGrid';
 import Testimonials from './MainExperience/components/Testimonials/Testimonials';
 
 import ChatSystem from './MainExperience/components/ChatSystem/ChatSystem';
+// import ProcessGrid from './ProcessGrid/ProcessGrid'; 
 import Footer from './MainExperience/components/Footer/Footer';
 
 import styles from './FullWebsite.module.css';
@@ -33,7 +34,7 @@ const FullWebsite = () => {
       <div id="services">
         <WorkTransitionWrapper />
       </div>
-
+      {/* <ProcessGrid /> */}
       {/* 5. Client Testimonials */}
       <div id="testimonials" style={{ marginBottom: "clamp(50px, 5vh, 100px)" }}>
         <Testimonials />

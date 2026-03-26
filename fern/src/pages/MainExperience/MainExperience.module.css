@@ -25,10 +25,13 @@
   left: 0;
   width: 100%;
   height: 100%;
-  /* Using rgba to make it 75% black. Increase the 0.75 if you want it darker */
-  background-color: #000000DB;
+  /* THE FIX: Changed from 86% hex to 40% rgba for a premium, airy feel */
+  background-color: rgba(0, 0, 0, 0.9); 
   z-index: 1;
+  /* Optional: Adds a very slight blur to the background images for extra class */
+  backdrop-filter: blur(2px); 
 }
+
 
 /* Layer 3: The Content */
 .contentLayer {

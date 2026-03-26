@@ -12,27 +12,27 @@ const MainExperience = () => {
   const [isTypingComplete, setIsTypingComplete] = useState(false);
   const [isBouncing, setIsBouncing] = useState(false);
   
-  // --- NEW: Image Sequence State ---
   const [currentFrame, setCurrentFrame] = useState(1);
   const TOTAL_FRAMES = 20;
 
   const fullHeadline = `Welcome ${displayName || ''} at Ferrn, we turn "meh" ideas into "whoa" brands.`;
 
   // ⏱️ ANIMATION TIMINGS
-  const FRAME_SPEED = 75;             
+  // THE FIX: Increased to 300 for a much slower, high-end "slideshow" feel
+  const FRAME_SPEED = 3000;             
   const VIDEO_PLAY_TIME = 3000;       
-  const OVERLAY_FADE_DURATION = 1500; 
+  const OVERLAY_FADE_DURATION = 2000; 
   const HEADER_DROP_DELAY = 4000;     
   const TYPING_START_DELAY = 4800;    
   const TYPING_SPEED = 40;           
 
   // ==========================================
-  // 🎢 THE SCROLL MAGIC (Scroll Interpolation)
+  // 🎢 THE SCROLL MAGIC 
   // ==========================================
   const { scrollY } = useScroll();
 
-  const heroOpacity = useTransform(scrollY, [0, 400], [1, 0]);
-  const heroScale = useTransform(scrollY, [0, 400], [1, 0.85]); 
+  const heroOpacity = useTransform(scrollY, [0, 500], [1, 0], { ease: (t) => t * (2 - t) });
+  const heroScale = useTransform(scrollY, [0, 500], [1, 0.8], { ease: (t) => t * (2 - t) }); 
 
   const navOpacity = useTransform(scrollY, [0, 250], [1, 0]);
   const navScale = useTransform(scrollY, [0, 250], [1, 0.5]);
@@ -42,8 +42,6 @@ const MainExperience = () => {
   // ==========================================
 
   useEffect(() => {
-    // We no longer need the clunky 'new Image()' preloader 
-    // because rendering all 20 DOM nodes below automatically preloads them!
     const frameInterval = setInterval(() => {
       setCurrentFrame((prevFrame) => (prevFrame === TOTAL_FRAMES ? 1 : prevFrame + 1));
     }, FRAME_SPEED);
@@ -86,7 +84,6 @@ const MainExperience = () => {
 
   if (!displayName) return null;
 
-  // We create a quick array of numbers [1, 2, 3... 20] to map over
   const framesArray = Array.from({ length: TOTAL_FRAMES }, (_, i) => i + 1);
 
   return (
@@ -103,15 +100,12 @@ const MainExperience = () => {
         }}
       >
         
-        {/* THE FIX: "The Stacked Deck" */}
-        {/* All 20 images exist in the DOM simultaneously. We just fade them in and out. */}
         {framesArray.map((frameNumber) => (
           <img 
             key={frameNumber}
             src={images[`fernwebsite${frameNumber}`]} 
             alt="Hero Background Animation" 
             className={styles.bgVideo} 
-            fetchPriority={frameNumber <= 3 ? "high" : "auto"} /* Prioritizes the first 3 frames */
             style={{ 
               objectFit: 'cover', 
               width: '100%', 
@@ -119,9 +113,11 @@ const MainExperience = () => {
               position: 'absolute',
               top: 0,
               left: 0,
-              opacity: currentFrame === frameNumber ? 1 : 0, /* Only show the active frame */
-              transition: 'opacity 0.15s ease-in-out', /* Buttery smooth crossfade between frames */
-              willChange: 'opacity' /* Tells the GPU to handle the crossfading */
+              // THE FIX: currentFrame === frameNumber ? 1 : 0 stays the same, 
+              // but the 'transition' below is what creates the "slow fade"
+              opacity: currentFrame === frameNumber ? 1 : 0, 
+              transition: 'opacity 0.8s ease-in-out', 
+              willChange: 'opacity' 
             }}
           />
         ))}
@@ -129,9 +125,13 @@ const MainExperience = () => {
         <motion.div 
           className={styles.videoOverlay}
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: VIDEO_PLAY_TIME / 1000, duration: OVERLAY_FADE_DURATION / 1000, ease: "easeInOut" }}
-          style={{ position: 'absolute', inset: 0, zIndex: 20 }} /* Make sure overlay sits above the images */
+          animate={{ opacity: 0.6 }} 
+          transition={{ 
+            delay: VIDEO_PLAY_TIME / 1000, 
+            duration: OVERLAY_FADE_DURATION / 1000, 
+            ease: "easeOut" 
+          }}
+          style={{ position: 'absolute', inset: 0, zIndex: 20 }} 
         ></motion.div>
 
         <div className={styles.contentLayer} style={{ zIndex: 30 }}>

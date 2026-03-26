@@ -1,5 +1,5 @@
-import { useState, useEffect, useMemo, useContext } from 'react';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { useState, useMemo, useContext, useEffect } from 'react';
+import { motion, useMotionValue, useSpring, AnimatePresence } from 'framer-motion';
 import images from '../../../../images';
 
 import { SectionTitle, ActionButtons } from '../../../../components/common/SectionHeaders';
@@ -22,7 +22,7 @@ const ProcessGrid = ({
 
   const [activeFilter, setActiveFilter] = useState(processTags[0]);
   
-  // --- INTERACTIVE MOUSE STATE ---
+  // --- CUSTOM CURSOR STATE ---
   const [isMobile, setIsMobile] = useState(false);
   const [isHoveringProject, setIsHoveringProject] = useState(false);
 
@@ -37,8 +37,6 @@ const ProcessGrid = ({
     checkMobile();
     window.addEventListener('resize', checkMobile);
     
-    // THE FIX: Cleanup function ensures the global cursor doesn't get stuck hidden 
-    // if the user navigates away while hovering over the grid.
     return () => {
       window.removeEventListener('resize', checkMobile);
       document.body.classList.remove('hide-global-cursor');
@@ -52,12 +50,14 @@ const ProcessGrid = ({
   };
 
   const filledGrid = useMemo(() => {
+    const filterStr = activeFilter ? activeFilter.trim().toLowerCase() : "";
+
     const categoryData = processGridData.filter((item) => {
       if (!item.category) return false;
       if (Array.isArray(item.category)) {
-        return item.category.includes(activeFilter);
+        return item.category.some(cat => cat.trim().toLowerCase() === filterStr);
       } else {
-        return item.category === activeFilter;
+        return item.category.trim().toLowerCase() === filterStr;
       }
     });
 
@@ -79,7 +79,7 @@ const ProcessGrid = ({
           gridCells.push(projectsToRender[projectIndex]);
         } else {
           gridCells.push({
-            id: `placeholder-${i}`,
+            id: `placeholder-${i}`, 
             isPlaceholder: true,
           });
         }
@@ -91,56 +91,50 @@ const ProcessGrid = ({
   }, [activeFilter]);
 
   return (
-    <section 
-      className={styles.gridContainer} 
-      onMouseMove={handleMouseMove}
-    >
-      {/* THE FIX: This injected style forces the GlobalCursor to disappear when inside the grid */}
+    <section className={styles.gridContainer} onMouseMove={handleMouseMove}>
+      
+      {/* Forces the global orange cursor to hide when hovering the grid */}
       <style>{`
         body.hide-global-cursor div[class*="cursorWrapper"] {
           opacity: 0 !important;
         }
       `}</style>
 
-      {/* THE INTERACTIVE CUSTOM CURSOR */}
-      {!isMobile && (
-        <motion.div
-          className={styles.customCursor}
-          style={{
-            x: cursorXSpring,
-            y: cursorYSpring,
-            scale: isHoveringProject ? 1 : 0,
-            opacity: isHoveringProject ? 1 : 0,
-            pointerEvents: "none", 
-            zIndex: 999999 /* THE FIX: Boosted z-index to ensure it is always on top! */
-          }}
-        >
-          Read Case Study
-        </motion.div>
-      )}
+      {/* THE RESTORED CUSTOM CURSOR */}
+      <AnimatePresence>
+        {!isMobile && isHoveringProject && (
+          <motion.div
+            className={styles.customCursor}
+            style={{
+              x: cursorXSpring,
+              y: cursorYSpring,
+              pointerEvents: "none", // CRITICAL: Lets clicks pass through to the buttons and cards
+              zIndex: 999999 
+            }}
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.5 }}
+            transition={{ duration: 0.2 }}
+          >
+            {caseStudyText}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className={styles.inner}>
 
-        {/* THE ARMORED HEADER */}
-        <div style={{ 
-          display: "flex", 
-          flexDirection: "column",
-          gap: "20px",
-          width: "100%", 
-          position: "relative", 
-          zIndex: 50, 
-          marginBottom: "30px"
-        }}>
+        {/* HEADER AREA */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "20px", width: "100%", marginBottom: "30px" }}>
           
           <SectionTitle mainText={title} dimText={subtitle} />
 
+          {/* THE BUTTONS */}
           <div className={styles.filterBlocks}>
             {processTags.map((tag, idx) => (
               <button
                 key={idx}
-                className={`${styles.filterButton} ${
-                  activeFilter === tag ? styles.activeFilter : ''
-                }`}
+                type="button" 
+                className={`${styles.filterButton} ${activeFilter === tag ? styles.activeFilter : ''}`}
                 onClick={() => setActiveFilter(tag)}
               >
                 {tag}
@@ -149,46 +143,45 @@ const ProcessGrid = ({
           </div>
         </div>
 
-        {/* GRID */}
+        {/* THE GRID */}
+        {/* Added mouse events to trigger the custom cursor visibility */}
         <div 
           className={styles.grid}
           onMouseEnter={() => {
             setIsHoveringProject(true);
-            // Hides the global orange cursor
             document.body.classList.add('hide-global-cursor');
           }}
           onMouseLeave={() => {
             setIsHoveringProject(false);
-            // Brings back the global orange cursor
             document.body.classList.remove('hide-global-cursor');
           }}
+          style={{ cursor: 'none' }} /* Hides your real mouse while inside the grid */
         >
-          {filledGrid.map((item) => {
+          {filledGrid.map((item, index) => {
             const isClickableProject = !item.isPlaceholder && !item.isCategoryCard && item.link;
             const CardTag = isClickableProject ? "a" : "div";
 
+            // Forces a clean redraw
+            const uniqueKey = `${item.id}-${activeFilter}-${index}`;
+
             return (
               <CardTag
-                key={item.id}
+                key={uniqueKey}
                 href={isClickableProject ? item.link : undefined}
                 target={isClickableProject ? "_blank" : undefined}
                 rel={isClickableProject ? "noopener noreferrer" : undefined}
                 className={`${styles.card} ${item.isPlaceholder ? styles.placeholder : ''} ${item.isCategoryCard ? styles.categoryCard : ''}`}
-                style={isClickableProject ? { textDecoration: 'none' } : {}}
+                style={isClickableProject ? { textDecoration: 'none', cursor: 'none' } : { cursor: 'none' }} 
               >
+                {/* Center Tile */}
                 {item.isCategoryCard && (
-                  <div className={styles.categoryCardContent}>
-                    {item.title}
-                  </div>
+                  <div className={styles.categoryCardContent}>{item.title}</div>
                 )}
 
+                {/* Real Projects */}
                 {isClickableProject && (
                   <>
-                    <img
-                      src={images[item.imgKey] || images.gridFallback}
-                      alt={item.title}
-                      className={styles.image}
-                    />
+                    <img src={images[item.imgKey] || images.gridFallback} alt={item.title} className={styles.image} />
                     <div className={styles.overlay}>
                       <div className={styles.mobileTag}>
                           <span>{caseStudyText}</span>
@@ -197,6 +190,7 @@ const ProcessGrid = ({
                   </>
                 )}
 
+                {/* Placeholders */}
                 {item.isPlaceholder && (
                   <div className={styles.placeholderContent}>
                     <span>Request a Custom Solution</span>
@@ -207,19 +201,9 @@ const ProcessGrid = ({
           })}
         </div>
 
-        {/* THE ARMORED FOOTER */}
-        <div style={{ 
-          width: "100%", 
-          position: "relative", 
-          zIndex: 50,
-          marginTop: "20px",
-          display: "flex",
-          justifyContent: "center"
-        }}>
-          <ActionButtons
-            ghostText={ghostText}
-            primaryText={primaryText}
-          />
+        {/* FOOTER AREA */}
+        <div style={{ width: "100%", marginTop: "20px", display: "flex", justifyContent: "center" }}>
+          <ActionButtons ghostText={ghostText} primaryText={primaryText} />
         </div>
 
       </div>
