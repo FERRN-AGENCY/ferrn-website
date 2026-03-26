@@ -23,7 +23,7 @@
   position: relative;
   width: 100%;
   /* Height accommodates the card (approx 650px) + the vertical lift (-15px) */
-  height: clamp(650px, 75vh, 850px);
+  height: clamp(450px, 75vh, 850px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -144,7 +144,7 @@
   display: flex;
   flex-direction: column;
 }
-
+/* 
 .transcribeToggle {
   background: none;
   border: none;
@@ -152,7 +152,7 @@
   font-size: 0.85rem;
   font-weight: 400;
   cursor: pointer;
-  text-align: center; /* Centered like in the screenshot */
+  text-align: center; 
   padding: 8px 0;
 }
 
@@ -168,7 +168,7 @@
   padding-top: 12px;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
   animation: fadeIn 0.3s ease;
-}
+} */
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-5px); }
@@ -197,6 +197,10 @@
     width: 90%;
     margin: auto;
   }
+  .carouselViewport{
+    justify-content: end;
+    align-items: end;
+  }
   /* Shrink the padding and gap inside the player */
   .playerContainer {
     padding: 12px 15px;
@@ -212,5 +216,23 @@
   .timer {
     font-size: 0.75rem;
     width: 28px;
+  }
+  .swipeIndicator {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Forces content to the exact middle */
+    width: 100%;
+    margin: 15px auto 15px auto; /* Centers the container itself */
+    gap: 10px; /* Perfect spacing between icon and text */
+    
+    color: #414141; /* The requested clean Gray */
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  .swipeIndicator svg {
+    stroke: #888888; /* Ensures the SVG exactly matches the text color */
+    opacity: 0.9;
   }
 }

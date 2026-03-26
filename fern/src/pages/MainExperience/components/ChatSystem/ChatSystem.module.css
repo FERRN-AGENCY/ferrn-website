@@ -181,6 +181,19 @@ section {
   background-color: #771E00;
   transform: translateY(-2px);
 }
+/* SWIPE INDICATOR (Mobile Only) */
+.swipeIndicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 0 auto 15px auto; 
+  gap: 10px; 
+  color: #888888; 
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
 
 /* Responsive Mobile Rules */
 @media (max-width: 768px) {
@@ -202,6 +215,24 @@ section {
   }
   .messageRowLeft {
     width: 85%; /* Let Bob's messages breathe more on mobile screens */
+  }
+    .swipeIndicator {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Forces content to the exact middle */
+    width: 100%;
+    margin: 15px auto 15px auto; /* Centers the container itself */
+    gap: 10px; /* Perfect spacing between icon and text */
+    
+    color: #414141; /* The requested clean Gray */
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  .swipeIndicator svg {
+    stroke: #888888; /* Ensures the SVG exactly matches the text color */
+    opacity: 0.9;
   }
 }
 

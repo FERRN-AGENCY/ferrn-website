@@ -142,9 +142,9 @@ const AboutUs = () => {
                         <img 
                           src={images.swipe} 
                           alt="Swipe gesture icon" 
-                          width="20" 
-                          height="20" 
-                          style={{ objectFit: 'contain', opacity: 0.9 }} 
+                          width="16" 
+                          height="16" 
+                          style={{ objectFit: 'contain', opacity: 0.9, Color: "#414141" }}
                         />
                         <span>Swipe to view more</span>
                       </div>

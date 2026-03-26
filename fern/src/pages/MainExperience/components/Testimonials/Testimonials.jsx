@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { SectionTitle, ActionButtons } from '../../../../components/common/SectionHeaders';
 import { testimonialsData } from '../../../../data/homeData';
+import images from '../../../../images'; 
 import styles from './Testimonials.module.css';
 
 // Helper to format seconds into 0:00
@@ -24,15 +25,6 @@ const AudioCard = ({ item, isCenter, isPlaying, positionOffset, onPlay, onAudioE
   const audioRef = useRef(null);
   const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
-  const [isTranscribing, setIsTranscribing] = useState(false);
-  const [transcript, setTranscript] = useState(null);
-
-  useEffect(() => {
-    if (!isCenter) {
-      setTranscript(null);
-      setIsTranscribing(false);
-    }
-  }, [isCenter]);
 
   useEffect(() => {
     if (isPlaying && audioRef.current) {
@@ -48,22 +40,6 @@ const AudioCard = ({ item, isCenter, isPlaying, positionOffset, onPlay, onAudioE
       const total = audioRef.current.duration;
       setCurrentTime(current);
       setProgress(total > 0 ? current / total : 0);
-    }
-  };
-
-  const handleTranscribe = async () => {
-    if (transcript) {
-      setTranscript(null); 
-      return;
-    }
-    setIsTranscribing(true);
-    try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setTranscript(item.quote); 
-    } catch (error) {
-      setTranscript("Failed to transcribe audio.");
-    } finally {
-      setIsTranscribing(false);
     }
   };
 
@@ -131,29 +107,6 @@ const AudioCard = ({ item, isCenter, isPlaying, positionOffset, onPlay, onAudioE
           preload="metadata"
         />
       </div>
-
-      <div className={styles.transcriptionWrapper}>
-        <button 
-          className={styles.transcribeToggle} 
-          onClick={(e) => { e.stopPropagation(); handleTranscribe(); }}
-          disabled={isTranscribing || !isCenter} 
-        >
-          {isTranscribing ? "Generating AI Transcript..." : transcript ? "Hide Transcript" : "Transcribe"}
-        </button>
-        
-        <AnimatePresence>
-          {transcript && (
-            <motion.div 
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              className={styles.transcriptBox}
-            >
-              "{transcript}"
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
     </motion.div>
   );
 };
@@ -161,21 +114,25 @@ const AudioCard = ({ item, isCenter, isPlaying, positionOffset, onPlay, onAudioE
 const Testimonials = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [playingId, setPlayingId] = useState(null);
+  const [isMobile, setIsMobile] = useState(false); 
   const totalItems = testimonialsData.length;
 
-  // --- THE AUTO-SCROLL FIX ---
   useEffect(() => {
-    const isMobile = window.innerWidth <= 768;
-    
-    // Only auto-scroll on mobile and if NO audio is currently playing
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile(); 
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  useEffect(() => {
     if (isMobile && playingId === null) {
       const interval = setInterval(() => {
         handleNext();
-      }, 4000); // 4 seconds per slide
+      }, 4000); 
 
       return () => clearInterval(interval);
     }
-  }, [activeIndex, playingId]); // Reset timer whenever we move or play audio
+  }, [activeIndex, playingId, isMobile]); 
 
   const handleNext = () => {
     setActiveIndex((prev) => (prev + 1) % totalItems);
@@ -237,6 +194,19 @@ const Testimonials = () => {
           );
         })}
       </div>
+
+      {isMobile && (
+        <div className={styles.swipeIndicator}>
+          <img 
+            src={images.swipe} 
+            alt="Swipe gesture icon" 
+            width="16" 
+            height="16" 
+            style={{ objectFit: 'contain', opacity: 0.9 }}
+          />
+          <span>Swipe to view more</span>
+        </div>
+      )}
 
       <div className={styles.footerButtons}>
         <ActionButtons 
