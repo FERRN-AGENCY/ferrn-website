@@ -28,7 +28,7 @@
   gap: 10px;
   width: 90%;
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
 }
 
 .filterButton {
@@ -223,10 +223,17 @@
 /* TEXT INSIDE EMPTY BOX */
 .placeholderContent {
   /* THE FIX: Adapts to gray text in both modes */
-  color: var(--font-text);
-  font-size: 0.8rem;
+  color: var(--gray-dark-mode);
+  font-size: 1.2rem;
   letter-spacing: 0.05em;
-  text-transform: uppercase;
+  width: 59%;
+  text-align: center;
+  /* text-transform: uppercase; */
+}
+
+.placeholderContent span {
+
+
 }
 
 /* RESPONSIVE */

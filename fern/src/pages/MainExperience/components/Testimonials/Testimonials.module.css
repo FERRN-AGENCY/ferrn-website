@@ -39,7 +39,7 @@
   max-width: 85vw; /* Keeps it responsive on phones */
   display: flex;
   flex-direction: column;
-  cursor: grab;
+  cursor: none;
   /* Dark mode grey container */
   background-color: var(--bg-secondary, #141414);
 }

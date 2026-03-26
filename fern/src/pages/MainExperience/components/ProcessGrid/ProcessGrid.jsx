@@ -36,14 +36,17 @@ const ProcessGrid = ({
     const checkMobile = () => setIsMobile(window.innerWidth <= 768);
     checkMobile();
     window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    
+    // THE FIX: Cleanup function ensures the global cursor doesn't get stuck hidden 
+    // if the user navigates away while hovering over the grid.
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+      document.body.classList.remove('hide-global-cursor');
+    };
   }, []);
 
-  // Track mouse movement across the grid container
   const handleMouseMove = (e) => {
     if (isMobile) return;
-    // THE FIX: Adjusted the offset for a rectangular button 
-    // (Subtracting roughly half the width and height to center it)
     cursorX.set(e.clientX - 75); 
     cursorY.set(e.clientY - 20); 
   };
@@ -92,7 +95,13 @@ const ProcessGrid = ({
       className={styles.gridContainer} 
       onMouseMove={handleMouseMove}
     >
-      
+      {/* THE FIX: This injected style forces the GlobalCursor to disappear when inside the grid */}
+      <style>{`
+        body.hide-global-cursor div[class*="cursorWrapper"] {
+          opacity: 0 !important;
+        }
+      `}</style>
+
       {/* THE INTERACTIVE CUSTOM CURSOR */}
       {!isMobile && (
         <motion.div
@@ -102,9 +111,10 @@ const ProcessGrid = ({
             y: cursorYSpring,
             scale: isHoveringProject ? 1 : 0,
             opacity: isHoveringProject ? 1 : 0,
+            pointerEvents: "none", 
+            zIndex: 999999 /* THE FIX: Boosted z-index to ensure it is always on top! */
           }}
         >
-          {/* THE FIX: Changed text to Read Case Study */}
           Read Case Study
         </motion.div>
       )}
@@ -140,45 +150,61 @@ const ProcessGrid = ({
         </div>
 
         {/* GRID */}
-        {/* THE FIX: Moved the hover triggers to the ENTIRE grid wrapper */}
         <div 
           className={styles.grid}
-          onMouseEnter={() => setIsHoveringProject(true)}
-          onMouseLeave={() => setIsHoveringProject(false)}
+          onMouseEnter={() => {
+            setIsHoveringProject(true);
+            // Hides the global orange cursor
+            document.body.classList.add('hide-global-cursor');
+          }}
+          onMouseLeave={() => {
+            setIsHoveringProject(false);
+            // Brings back the global orange cursor
+            document.body.classList.remove('hide-global-cursor');
+          }}
         >
-          {filledGrid.map((item) => (
-            <div
-              key={item.id}
-              className={`${styles.card} ${item.isPlaceholder ? styles.placeholder : ''} ${item.isCategoryCard ? styles.categoryCard : ''}`}
-            >
-              {item.isCategoryCard && (
-                <div className={styles.categoryCardContent}>
-                  {item.title}
-                </div>
-              )}
+          {filledGrid.map((item) => {
+            const isClickableProject = !item.isPlaceholder && !item.isCategoryCard && item.link;
+            const CardTag = isClickableProject ? "a" : "div";
 
-              {!item.isPlaceholder && !item.isCategoryCard && (
-                <>
-                  <img
-                    src={images[item.imgKey] || images.gridFallback}
-                    alt={item.title}
-                    className={styles.image}
-                  />
-                  <div className={styles.overlay}>
-                    <div className={styles.mobileTag}>
-                        <span>{caseStudyText}</span>
-                    </div>
+            return (
+              <CardTag
+                key={item.id}
+                href={isClickableProject ? item.link : undefined}
+                target={isClickableProject ? "_blank" : undefined}
+                rel={isClickableProject ? "noopener noreferrer" : undefined}
+                className={`${styles.card} ${item.isPlaceholder ? styles.placeholder : ''} ${item.isCategoryCard ? styles.categoryCard : ''}`}
+                style={isClickableProject ? { textDecoration: 'none' } : {}}
+              >
+                {item.isCategoryCard && (
+                  <div className={styles.categoryCardContent}>
+                    {item.title}
                   </div>
-                </>
-              )}
+                )}
 
-              {item.isPlaceholder && (
-                <div className={styles.placeholderContent}>
-                  <span>Add Project</span>
-                </div>
-              )}
-            </div>
-          ))}
+                {isClickableProject && (
+                  <>
+                    <img
+                      src={images[item.imgKey] || images.gridFallback}
+                      alt={item.title}
+                      className={styles.image}
+                    />
+                    <div className={styles.overlay}>
+                      <div className={styles.mobileTag}>
+                          <span>{caseStudyText}</span>
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                {item.isPlaceholder && (
+                  <div className={styles.placeholderContent}>
+                    <span>Request a Custom Solution</span>
+                  </div>
+                )}
+              </CardTag>
+            );
+          })}
         </div>
 
         {/* THE ARMORED FOOTER */}

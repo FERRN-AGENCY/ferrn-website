@@ -11,15 +11,20 @@ const MainExperience = () => {
   const [isTypingStarted, setIsTypingStarted] = useState(false);
   const [isTypingComplete, setIsTypingComplete] = useState(false);
   const [isBouncing, setIsBouncing] = useState(false);
+  
+  // --- NEW: Image Sequence State ---
+  const [currentFrame, setCurrentFrame] = useState(1);
+  const TOTAL_FRAMES = 20;
 
   const fullHeadline = `Welcome ${displayName || ''} at Ferrn, we turn "meh" ideas into "whoa" brands.`;
 
-  // ⏱️ ANIMATION TIMINGS
+// ⏱️ ANIMATION TIMINGS
+  const FRAME_SPEED = 75;             // <-- NEW: Higher number = slower playback (75ms is the sweet spot)
   const VIDEO_PLAY_TIME = 3000;       
   const OVERLAY_FADE_DURATION = 1500; 
   const HEADER_DROP_DELAY = 4000;     
   const TYPING_START_DELAY = 4800;    
-  const TYPING_SPEED = 40;            
+  const TYPING_SPEED = 40;           
 
   // ==========================================
   // 🎢 THE SCROLL MAGIC (Scroll Interpolation)
@@ -35,6 +40,22 @@ const MainExperience = () => {
   const logoScale = useTransform(scrollY, [0, 300], [1, 2.5]); 
   const logoY = useTransform(scrollY, [0, 300, 450, 700], [0, 250, 250, -500]); 
   // ==========================================
+
+  // --- NEW: Image Sequence Preloader & Player ---
+  useEffect(() => {
+    // 1. Preload all 20 images
+    for (let i = 1; i <= TOTAL_FRAMES; i++) {
+      const img = new Image();
+      img.src = images[`FernWebsite${i}`];
+    }
+
+    // 2. The Playback Engine (Now controlled by FRAME_SPEED)
+    const frameInterval = setInterval(() => {
+      setCurrentFrame((prevFrame) => (prevFrame === TOTAL_FRAMES ? 1 : prevFrame + 1));
+    }, FRAME_SPEED);
+
+    return () => clearInterval(frameInterval);
+  }, []);
 
   useEffect(() => {
     const initialDelay = setTimeout(() => {
@@ -72,14 +93,18 @@ const MainExperience = () => {
   if (!displayName) return null;
 
   return (
-    // NEW: Added backgroundColor: 'var(--bg-primary)' here! 
-    // This ensures the shrinking video visually melts into the exact color of the next section.
     <div className={styles.heroContainer} style={{ position: 'sticky', top: 0, zIndex: 0, backgroundColor: 'var(--bg-primary)' }}>
       
       <motion.div style={{ opacity: heroOpacity, scale: heroScale, width: '100%', height: '100%', position: 'absolute' }}>
-        <video autoPlay loop muted playsInline className={styles.bgVideo}>
-          <source src={images.HeroVideo} type="video/mp4" />
-        </video>
+        
+        {/* THE FIX: Replaced the <video> tag with our rapidly updating <img> tag */}
+        {/* We keep the styles.bgVideo class so it retains your exact sizing and positioning */}
+        <img 
+          src={images[`fernwebsite${currentFrame}`]} 
+          alt="Hero Background Animation" 
+          className={styles.bgVideo} 
+          style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+        />
 
         <motion.div 
           className={styles.videoOverlay}
