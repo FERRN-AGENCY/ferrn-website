@@ -61,15 +61,9 @@ const GlobalCursor = () => {
       }}
     >
       <div className={styles.cursorContainer}>
-        {/* THE CHUNKY ARROW */}
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path 
-            d="M3 3L21 9L13 12L9 19L3 3Z" 
-            fill="#F94406" 
-            stroke="#F94406" 
-            strokeWidth="1" 
-            strokeLinejoin="round"
-          />
+        {/* THE ORANGE SHAPE FROM YOUR SCREENSHOT */}
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={styles.cursorShape}>
+            <path d="M2 2 H18 V8 H8 V18 H2 V2 Z" fill="#F94406" />
         </svg>
 
         {/* THE NAME: Positioned under the curve */}

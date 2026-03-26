@@ -4,8 +4,8 @@
 
 export const processTags = [
   "Development",
+  "Branding",  
   "AI & Automation",
-  "Branding",
 ];
 
 // Updated with your real project titles, correct image keys, tags, and Notion links!
@@ -19,7 +19,7 @@ export const processGridData = [
   { id: 6, title: 'Street Soak', imgKey: 'grid6', category: ['Development'], link: 'https://www.notion.so/Street-Soak-Website-Concept-32e38b082d81802db3e7cc80daded684?source=copy_link' },
   { id: 7, title: 'DMX Concept', imgKey: 'grid7', category: ['Development'], link: 'https://www.notion.so/DMX-Website-Concept-32e38b082d8180a5b179dece5579a3ff?source=copy_link' },
   // Cross-tagged Summed AI because it bridges Development and AI!
-  { id: 8, title: 'Summed AI', imgKey: 'grid8', category: ['Development', 'AI & Automation'], link: 'https://www.notion.so/Summed-Ai-Website-Concept-32e38b082d8180afadc8f315b6a67470?source=copy_link' },
+  { id: 8, title: 'Summed AI', imgKey: 'grid8', category: ['Development'], link: 'https://www.notion.so/Summed-Ai-Website-Concept-32e38b082d8180afadc8f315b6a67470?source=copy_link' },
 
   // --- BRANDING ---
   { id: 9, title: 'Oz Vibez', imgKey: 'brand1', category: ['Branding'], link: 'https://www.notion.so/Oz-Vibez-32e38b082d81803987cad9bc4e88e44a?source=copy_link' },
