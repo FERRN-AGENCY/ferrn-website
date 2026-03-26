@@ -114,7 +114,7 @@ const AboutUs = () => {
               drag="x"
               dragConstraints={{ left: 0, right: 0 }}
               dragElastic={0.2}
-              onDragEnd={handleDragEnd} // <-- Hooked up the swipe logic here!
+              onDragEnd={handleDragEnd} 
             >
               <div 
                 className={styles.imagePlaceholder}
@@ -130,10 +130,27 @@ const AboutUs = () => {
                       <span key={index} className={styles.tag}>{tag}</span>
                     ))}
                   </div>
+                  
                   <div className={styles.blackbg}>
                     <h3 className={styles.mobileCardTitle}>{activeContent.tabTitle}</h3>
                     <p className={styles.cardDescription}>{activeContent.description}</p>
+                    
+                    {/* THE NEW SWIPE INDICATOR (Mobile Only) */}
+                    {isMobile && (
+                      <div className={styles.swipeIndicator}>
+                        {/* Using your custom swip image */}
+                        <img 
+                          src={images.swipe} 
+                          alt="Swipe gesture icon" 
+                          width="20" 
+                          height="20" 
+                          style={{ objectFit: 'contain', opacity: 0.9 }} 
+                        />
+                        <span>Swipe to view more</span>
+                      </div>
+                    )}
                   </div>
+                  
                 </div>
               </div>
             </motion.div>

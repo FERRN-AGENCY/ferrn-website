@@ -75,6 +75,9 @@ import fernwebsite18 from '../assets/Ferrn Website-18.jpg';
 import fernwebsite19 from '../assets/Ferrn Website-19.jpg';
 import fernwebsite20 from '../assets/Ferrn Website-20.jpg';
 
+import heroVideo from '../assets/HeroVideo.mp4';
+import swipe from '../assets/swipe.svg';
+
 const images = {
   Fernlogo,
   Fern,
@@ -153,6 +156,9 @@ const images = {
   fernwebsite18,
   fernwebsite19,
   fernwebsite20,
+
+  heroVideo,
+  swipe,
 };
 
 export default images;

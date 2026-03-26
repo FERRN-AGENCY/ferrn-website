@@ -159,4 +159,23 @@
     font-weight: 700;
     margin: 0 0 8px 0;
   }
+    /* SWIPE INDICATOR (Mobile Only) */
+  .swipeIndicator {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Forces content to the exact middle */
+    width: 100%;
+    margin: 15px auto 15px auto; /* Centers the container itself */
+    gap: 10px; /* Perfect spacing between icon and text */
+    
+    color: #888888; /* The requested clean Gray */
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  .swipeIndicator svg {
+    stroke: #888888; /* Ensures the SVG exactly matches the text color */
+    opacity: 0.9;
+  }
 }

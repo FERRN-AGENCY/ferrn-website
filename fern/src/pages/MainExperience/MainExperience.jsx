@@ -11,19 +11,13 @@ const MainExperience = () => {
   const [isTypingStarted, setIsTypingStarted] = useState(false);
   const [isTypingComplete, setIsTypingComplete] = useState(false);
   const [isBouncing, setIsBouncing] = useState(false);
-  
-  const [currentFrame, setCurrentFrame] = useState(1);
-  const TOTAL_FRAMES = 20;
 
   const fullHeadline = `Welcome ${displayName || ''} at Ferrn, we turn "meh" ideas into "whoa" brands.`;
 
-  // ⏱️ ANIMATION TIMINGS
-  // THE FIX: Increased to 300 for a much slower, high-end "slideshow" feel
-  const FRAME_SPEED = 3000;             
-  const VIDEO_PLAY_TIME = 3000;       
-  const OVERLAY_FADE_DURATION = 2000; 
-  const HEADER_DROP_DELAY = 4000;     
-  const TYPING_START_DELAY = 4800;    
+  // ⏱️ THE FIX: SNAPPY, ZERO-WAIT TIMINGS
+  const OVERLAY_FADE_DURATION = 1000; // Overlay fades in over 1 second smoothly
+  const HEADER_DROP_DELAY = 300;      // Logo drops almost instantly (0.3s)
+  const TYPING_START_DELAY = 1000;    // Typing starts right as the logo finishes dropping (1s)
   const TYPING_SPEED = 40;           
 
   // ==========================================
@@ -41,14 +35,7 @@ const MainExperience = () => {
   const logoY = useTransform(scrollY, [0, 300, 450, 700], [0, 250, 250, -500]); 
   // ==========================================
 
-  useEffect(() => {
-    const frameInterval = setInterval(() => {
-      setCurrentFrame((prevFrame) => (prevFrame === TOTAL_FRAMES ? 1 : prevFrame + 1));
-    }, FRAME_SPEED);
-
-    return () => clearInterval(frameInterval);
-  }, []);
-
+  // Typing Effect Logic
   useEffect(() => {
     const initialDelay = setTimeout(() => {
       setIsTypingStarted(true);
@@ -70,6 +57,7 @@ const MainExperience = () => {
     return () => clearTimeout(initialDelay);
   }, [fullHeadline]);
 
+  // "Scroll Down" Bounce Logic
   useEffect(() => {
     const totalEntranceTime = TYPING_START_DELAY + (fullHeadline.length * TYPING_SPEED);
     const startBouncing = setTimeout(() => {
@@ -83,8 +71,6 @@ const MainExperience = () => {
   }, [fullHeadline.length]);
 
   if (!displayName) return null;
-
-  const framesArray = Array.from({ length: TOTAL_FRAMES }, (_, i) => i + 1);
 
   return (
     <div className={styles.heroContainer} style={{ position: 'sticky', top: 0, zIndex: 0, backgroundColor: 'var(--bg-primary)' }}>
@@ -100,40 +86,39 @@ const MainExperience = () => {
         }}
       >
         
-        {framesArray.map((frameNumber) => (
-          <img 
-            key={frameNumber}
-            src={images[`fernwebsite${frameNumber}`]} 
-            alt="Hero Background Animation" 
-            className={styles.bgVideo} 
-            style={{ 
-              objectFit: 'cover', 
-              width: '100%', 
-              height: '100%',
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              // THE FIX: currentFrame === frameNumber ? 1 : 0 stays the same, 
-              // but the 'transition' below is what creates the "slow fade"
-              opacity: currentFrame === frameNumber ? 1 : 0, 
-              transition: 'opacity 0.8s ease-in-out', 
-              willChange: 'opacity' 
-            }}
-          />
-        ))}
+        {/* THE VIDEO */}
+        <video 
+          src={images.heroVideo} 
+          poster={images.fernwebsite1} 
+          className={styles.bgVideo} 
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          style={{ 
+            objectFit: 'cover', 
+            width: '100%', 
+            height: '100%',
+            position: 'absolute',
+            top: 0,
+            left: 0
+          }}
+        />
 
+        {/* THE OVERLAY: Instantly starts fading to 0.4 opacity over 1 second */}
         <motion.div 
           className={styles.videoOverlay}
           initial={{ opacity: 0 }}
-          animate={{ opacity: 0.6 }} 
+          animate={{ opacity: 0.4 }} 
           transition={{ 
-            delay: VIDEO_PLAY_TIME / 1000, 
             duration: OVERLAY_FADE_DURATION / 1000, 
             ease: "easeOut" 
           }}
           style={{ position: 'absolute', inset: 0, zIndex: 20 }} 
         ></motion.div>
 
+        {/* THE TYPING TEXT */}
         <div className={styles.contentLayer} style={{ zIndex: 30 }}>
           <div className={styles.centerContent} >
             <h1 className={styles.heroHeadline}>
@@ -144,6 +129,7 @@ const MainExperience = () => {
         </div>
       </motion.div>
 
+      {/* THE HEADER & LOGO */}
       <motion.header 
         className={styles.header}
         initial={{ y: -100, opacity: 0 }}
