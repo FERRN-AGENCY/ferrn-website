@@ -61,6 +61,12 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  /* THE FIX: Ensures the focus stays on the center of the image */
+  object-position: top center; 
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .nameTag {
