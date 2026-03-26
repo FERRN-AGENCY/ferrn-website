@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion'; 
 import styles from './MainExperience.module.css';
 import images from '../../images'; 
@@ -6,6 +6,10 @@ import { useRequireName } from '../../hooks/useRequireName';
 
 const MainExperience = () => {
   const displayName = useRequireName();
+  
+  const videoRef = useRef(null);
+  // THE FIX: This flag makes sure we only reset the video ONCE
+  const isVideoInitialized = useRef(false); 
 
   const [displayedHeadline, setDisplayedHeadline] = useState('');
   const [isTypingComplete, setIsTypingComplete] = useState(false);
@@ -34,7 +38,16 @@ const MainExperience = () => {
   const logoY = useTransform(scrollY, [0, 300, 450, 700], [0, 250, 250, -500]); 
   // ==========================================
 
-  // Typing Effect Logic (Cleaned up to reduce memory leaks)
+  // THE FIX: Forces the video to start at 0:00, but ONLY the very first time it loads
+  const handleVideoReady = () => {
+    if (videoRef.current && !isVideoInitialized.current) {
+      isVideoInitialized.current = true; // Locks the function so it never fires again
+      videoRef.current.currentTime = 0; 
+      videoRef.current.play().catch(e => console.log("Browser autoplay pause:", e));
+    }
+  };
+
+  // Typing Effect Logic
   useEffect(() => {
     const initialDelay = setTimeout(() => {
       let currentIndex = 0;
@@ -83,8 +96,8 @@ const MainExperience = () => {
         }}
       >
         
-        {/* THE VIDEO: Restored to full height/width without the extra heavy cropping logic */}
         <video 
+          ref={videoRef}
           src={images.heroVideo} 
           poster={images.fernwebsite1} 
           className={styles.bgVideo} 
@@ -93,18 +106,18 @@ const MainExperience = () => {
           muted
           playsInline
           disablePictureInPicture
+          onCanPlay={handleVideoReady} 
           style={{ 
-            // objectFit: 'cover', 
-            // width: '100%', 
-            // height: '100%',
+            objectFit: 'cover', 
+            width: '100%',     
+            height: '100%',    
             position: 'absolute',
             top: 0,
             left: 0,
-            transform: 'translateZ(0)' // Hardware Acceleration
+            transform: 'translateZ(0)' 
           }}
         />
 
-        {/* THE OVERLAY: Using your exact requested gradient */}
         <motion.div 
           className={styles.videoOverlay}
           initial={{ opacity: 0 }}
@@ -121,7 +134,6 @@ const MainExperience = () => {
           }} 
         />
 
-        {/* THE TYPING TEXT */}
         <div className={styles.contentLayer} style={{ zIndex: 30 }}>
           <div className={styles.centerContent} >
             <h1 className={styles.heroHeadline}>
@@ -132,7 +144,6 @@ const MainExperience = () => {
         </div>
       </motion.div>
 
-      {/* THE HEADER & LOGO */}
       <motion.header 
         className={styles.header}
         initial={{ y: -100, opacity: 0 }}
