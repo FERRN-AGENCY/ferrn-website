@@ -106,7 +106,7 @@ const MainExperience = () => {
         
         <video 
           ref={videoRef}
-          src={images.heroVideo} 
+          src="https://res.cloudinary.com/dyizdpyem/video/upload/v1774608421/Hero-section-main-vid_gqvbbw.mp4" 
           poster={images.fernwebsite1} 
           className={styles.bgVideo} 
           autoPlay
