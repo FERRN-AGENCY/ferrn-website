@@ -55,7 +55,6 @@ import defaultImg from '../assets/default_img.svg';
 
 import fernwebsite1 from '../assets/Ferrn Website-1.jpg';
 
-import heroVideo from '../assets/HeroVideo.mp4';
 import swipe from '../assets/swipe.svg';
 
 const images = {
@@ -117,7 +116,7 @@ const images = {
 
   fernwebsite1,
 
-  heroVideo,
+
   swipe,
 };
 
