@@ -1,6 +1,5 @@
 import Fernlogo from '../assets/Fernlogo.svg';
 import Fern from '../assets/Fern.svg';
-import HeroVideo from '../assets/HeroVideo.mp4';
 import avatarBob from '../assets/avatarBob.svg';
 
 import clientLogo1 from '../assets/clientLogo1.svg';
@@ -62,7 +61,6 @@ import swipe from '../assets/swipe.svg';
 const images = {
   Fernlogo,
   Fern,
-  HeroVideo,
   avatarBob,
 
   clientLogo1,
