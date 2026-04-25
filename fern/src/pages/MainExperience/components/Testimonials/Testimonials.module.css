@@ -62,7 +62,7 @@
   height: 100%;
   object-fit: cover;
   /* THE FIX: Ensures the focus stays on the center of the image */
-  object-position: top center; 
+  object-position: 20% 40%;
   position: absolute;
   top: 50%;
   left: 50%;

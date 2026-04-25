@@ -73,6 +73,30 @@ export const testimonialsData = [
     imageUrl: "https://res.cloudinary.com/dyizdpyem/image/upload/v1774553630/Screenshot_2026-03-26_at_6.23.23_PM_u6e1lv.png",
     audioUrl: "https://res.cloudinary.com/dyizdpyem/video/upload/v1774553644/WhatsApp_Audio_2026-03-26_at_6.18.43_PM_pqa6ch.3gp",
     quote: "Fast, ruthless, and incredibly talented. They cut out all the agency fluff and just delivered pure, high-end results on time."
-  }  
+  }, 
+  {
+    id: 6,
+    name: "Elsa",
+    role: "From Upwork",
+    imageUrl: "https://res.cloudinary.com/dyizdpyem/image/upload/v1777105055/Elsa_ccnhsh.jpg",
+    audioUrl: "https://res.cloudinary.com/dyizdpyem/video/upload/v1777105046/Elsa_wxbent.mp3",
+    quote: "Fast, ruthless, and incredibly talented. They cut out all the agency fluff and just delivered pure, high-end results on time."
+  },
+  {
+    id: 7,
+    name: "Mark",
+    role: "Start-up Founder from UrbanixNest",
+    imageUrl: "https://res.cloudinary.com/dyizdpyem/image/upload/v1777104987/Mark_l7a0ys.jpg",
+    audioUrl: "https://res.cloudinary.com/dyizdpyem/video/upload/v1777104985/Mark_wkx4ix.mp3",
+    quote: "Fast, ruthless, and incredibly talented. They cut out all the agency fluff and just delivered pure, high-end results on time."
+  },
+  {
+    id: 8,
+    name: "Stan",
+    role: "Founder from Upwork",
+    imageUrl: "https://res.cloudinary.com/dyizdpyem/image/upload/v1777104925/stan_qv4rvo.jpg",
+    audioUrl: "https://res.cloudinary.com/dyizdpyem/video/upload/v1777104866/Stan_qag6is.mp3",
+    quote: "Fast, ruthless, and incredibly talented. They cut out all the agency fluff and just delivered pure, high-end results on time."
+  }
   
 ];
